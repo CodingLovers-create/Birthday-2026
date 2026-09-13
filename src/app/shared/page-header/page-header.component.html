@@ -1,0 +1,9 @@
+<header class="relative flex h-14 items-center border-b border-brand-dark/30 bg-surface px-4">
+  <button type="button" class="text-xl text-heading" (click)="back.emit()">←</button>
+  <h1 class="absolute left-1/2 -translate-x-1/2 whitespace-nowrap font-heading text-base text-heading">
+    {{ title() }}
+  </h1>
+  <div class="ml-auto">
+    <ng-content></ng-content>
+  </div>
+</header>

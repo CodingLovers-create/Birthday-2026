@@ -1,0 +1,33 @@
+<div class="mx-auto min-h-screen max-w-lg bg-surface pb-8">
+  <app-page-header title="My Posts" (back)="goBack()"></app-page-header>
+
+  <main class="px-0 pt-2">
+    <p *ngIf="isLoading()" class="py-16 text-center text-sm text-ink/40">Loading…</p>
+
+    <div *ngFor="let post of posts()" #postAnchor>
+      <app-post-card
+        [post]="post"
+        (updated)="onPostUpdated($event)"
+        (report)="requestDelete($event)"
+        (delete)="requestDelete($event)"
+        (openComments)="activeCommentsPostId.set($event.postId)"
+      ></app-post-card>
+    </div>
+  </main>
+</div>
+
+<app-comment-section
+  *ngIf="activeCommentsPostId() as postId"
+  [postId]="postId"
+  (close)="activeCommentsPostId.set(null)"
+></app-comment-section>
+
+<app-confirm-dialog
+  *ngIf="postPendingDelete() as post"
+  title="Delete this post?"
+  message="This will remove your post from the wall."
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+></app-confirm-dialog>

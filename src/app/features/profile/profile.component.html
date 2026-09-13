@@ -1,0 +1,35 @@
+<div class="mx-auto min-h-screen max-w-lg bg-surface pb-8">
+  <app-page-header title="Profile" (back)="goBack()"></app-page-header>
+
+  <div class="flex flex-col items-center gap-2 px-4 pb-4 pt-6">
+    <img [src]="profileAvatar" [alt]="profileName" class="h-16 w-16 rounded-full border border-neutral-100 object-cover" />
+    <h2 class="font-bold text-heading">{{ profileName | capitalizeFirst | nameFormatter }}</h2>
+  </div>
+
+  <div class="mx-4 flex items-center justify-around rounded-2xl border border-heading px-2 py-3 text-heading">
+    <div class="flex-1 text-center text-sm font-semibold">
+      {{ posts().length | numberRoundoff }} {{ posts().length === 1 ? 'Post' : 'Posts' }}
+    </div>
+    <div class="h-4 w-px bg-heading"></div>
+    <div class="flex-1 text-center text-sm font-semibold">{{ totalLikes | numberRoundoff }} Likes</div>
+    <div class="h-4 w-px bg-heading"></div>
+    <div class="flex-1 text-center text-sm font-semibold">{{ totalShares | numberRoundoff }} Shares</div>
+  </div>
+
+  <p *ngIf="isLoading()" class="py-16 text-center text-sm text-ink/40">Loading your posts…</p>
+
+  <p *ngIf="!isLoading() && posts().length === 0" class="px-6 py-16 text-center text-sm text-ink/40">
+    You haven't posted any birthday wishes yet.
+  </p>
+
+  <div *ngIf="!isLoading() && posts().length > 0" class="mt-4 grid grid-cols-3 gap-0.5 px-0.5">
+    <button
+      type="button"
+      *ngFor="let post of posts()"
+      class="aspect-square overflow-hidden bg-neutral-100"
+      (click)="openPost(post)"
+    >
+      <img [src]="post.images[0]" alt="Post thumbnail" class="h-full w-full object-cover" />
+    </button>
+  </div>
+</div>

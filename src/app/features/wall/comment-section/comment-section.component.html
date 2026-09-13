@@ -1,0 +1,53 @@
+<div class="fixed inset-0 z-50 flex items-end justify-center bg-ink/20" (click)="close.emit()">
+  <div class="flex h-[75vh] w-full max-w-lg flex-col rounded-t-2xl bg-white" (click)="$event.stopPropagation()">
+    <header class="flex flex-col items-center gap-1 border-b border-ink/10 px-4 py-3">
+      <div class="h-1 w-14 rounded-full bg-neutral-400"></div>
+      <div class="mt-1 flex w-full items-center justify-between">
+        <h3 class="font-nunito text-base text-ink">Comments</h3>
+        <button type="button" class="text-ink/40" (click)="close.emit()">✕</button>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto px-4 py-3">
+      <p *ngIf="isLoading()" class="py-8 text-center text-sm text-ink/40">Loading comments…</p>
+
+      <p *ngIf="!isLoading() && comments().length === 0" class="py-8 text-center text-sm text-ink/40">
+        No comments yet. Add a comment!
+      </p>
+
+      <div *ngFor="let comment of comments()" class="mb-4 flex gap-2.5">
+        <img [src]="comment.tinyProfilePic" [alt]="comment.commentBy" class="h-6 w-6 flex-shrink-0 rounded-full object-cover" />
+        <div class="flex-1">
+          <p class="text-xs text-ink">{{ comment.commentBy | capitalizeFirst | nameFormatter }}</p>
+          <p class="mt-0.5 text-sm text-ink">{{ comment.comment }}</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <button type="button" class="text-base" [class.text-danger]="comment.likeByMe" [class.text-ink]="!comment.likeByMe" (click)="toggleLike(comment.id)">
+            {{ comment.likeByMe ? '♥' : '♡' }}
+          </button>
+          <span class="text-xs text-ink/50">{{ comment.likescount > 0 ? comment.likescount : '' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <footer class="flex items-center gap-2 border-t border-ink/10 px-4 py-3">
+      <img src="https://i.pravatar.cc/100?img=12" alt="You" class="h-6 w-6 rounded-full object-cover" />
+      <input
+        type="text"
+        [(ngModel)]="newCommentText"
+        (keyup.enter)="submitComment()"
+        placeholder="Add a comment"
+        maxlength="200"
+        class="flex-1 rounded-full bg-surface px-4 py-2 text-sm text-ink outline-none"
+      />
+      <button
+        type="button"
+        class="text-sm font-semibold text-brand disabled:opacity-40"
+        [disabled]="!newCommentText.trim() || isPosting()"
+        (click)="submitComment()"
+      >
+        Post
+      </button>
+    </footer>
+  </div>
+</div>

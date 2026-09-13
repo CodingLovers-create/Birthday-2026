@@ -1,0 +1,51 @@
+<div class="fixed inset-0 z-40 flex items-end justify-center bg-ink/70" (click)="requestClose()">
+  <div class="w-full max-w-lg rounded-t-2xl bg-white p-5" (click)="$event.stopPropagation()">
+    <div class="mb-4 flex items-center justify-between">
+      <h3 class="font-nunito text-lg font-semibold text-heading">Filter</h3>
+      <button type="button" class="text-ink/40" (click)="requestClose()">✕</button>
+    </div>
+
+    <p class="mb-2 text-xs font-medium uppercase tracking-wide text-brand">Category</p>
+    <div class="mb-6 flex flex-wrap gap-2">
+      <button
+        *ngFor="let tag of tags"
+        type="button"
+        class="rounded-full border px-3 py-1.5 text-sm"
+        [ngClass]="
+          selectedTag === tag ? 'border-brand bg-brand/10 text-brand' : 'border-neutral-200 text-ink/70'
+        "
+        (click)="pickTag(tag)"
+      >
+        {{ tag }}
+      </button>
+    </div>
+
+    <div class="flex justify-between gap-3">
+      <div class="flex w-1/2 justify-center">
+        <button
+          type="button"
+          class="w-4/5 rounded-full border border-brand py-3 text-sm font-medium text-brand disabled:opacity-50"
+          [disabled]="!selectedTag"
+          (click)="clearTag()"
+        >
+          Reset
+        </button>
+      </div>
+      <div class="flex w-1/2 justify-center">
+        <button type="button" class="w-4/5 rounded-full bg-brand py-3 text-sm font-medium text-white" (click)="applyFilter()">
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-confirm-dialog
+  *ngIf="isExitConfirmOpen()"
+  title="Discard changes?"
+  message="You have unsaved filter changes."
+  confirmLabel="Yes"
+  cancelLabel="No"
+  (confirm)="discardAndClose()"
+  (cancel)="isExitConfirmOpen.set(false)"
+></app-confirm-dialog>
