@@ -7,6 +7,7 @@
           [src]="post.tinyProfilePic"
           [alt]="post.userName"
           class="h-9 w-9 rounded-full object-cover"
+          (error)="post.tinyProfilePic = 'assets/images/templates/Preview1.webp'"
         />
         <div>
           <p class="font-nunito text-sm text-ink">
@@ -44,12 +45,13 @@
         [style.transform]="'translateX(-' + currentImageIndex() * 100 + '%)'"
       >
         <img
-          *ngFor="let image of post.images"
+          *ngFor="let image of post.images; let i = index"
           [src]="image"
           alt="Birthday post"
           loading="lazy"
           class="h-full w-full flex-shrink-0 cursor-zoom-in object-contain"
           (click)="openZoom()"
+          (error)="post.images[i] = 'assets/images/templates/Preview1.webp'"
         />
       </div>
 

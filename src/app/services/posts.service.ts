@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, Subject, map, switchMap, tap } from 'rxjs';
 import { FilterState } from '../models/filter.model';
 import { Post } from '../models/post.model';
 import { API_BASE_URL } from './api-config';
@@ -15,6 +15,10 @@ export interface FeedPage {
 @Injectable({ providedIn: 'root' })
 export class PostsService {
   private readonly postsUrl = `${API_BASE_URL}/posts`;
+  private readonly postCreatedSource = new Subject<Post>();
+
+  /** Observable stream emitted whenever a new post is created across components */
+  readonly postCreated$ = this.postCreatedSource.asObservable();
 
   constructor(private readonly http: HttpClient) {}
 
@@ -43,14 +47,14 @@ export class PostsService {
     return this.http.get<Post[]>(this.postsUrl, { params });
   }
 
-  getPostById(postId: number): Observable<Post> {
-    return this.http.get<Post>(`${this.postsUrl}/${postId}`);
+  getPostById(targetId: number | string): Observable<Post> {
+    return this.http.get<Post>(`${this.postsUrl}/${targetId}`);
   }
 
-  toggleLike(postId: number): Observable<Post> {
-    return this.getPostById(postId).pipe(
+  toggleLike(targetId: number | string): Observable<Post> {
+    return this.getPostById(targetId).pipe(
       switchMap((post) =>
-        this.http.patch<Post>(`${this.postsUrl}/${postId}`, {
+        this.http.patch<Post>(`${this.postsUrl}/${targetId}`, {
           likeByMe: !post.likeByMe,
           likes: post.likes + (post.likeByMe ? -1 : 1)
         })
@@ -58,25 +62,48 @@ export class PostsService {
     );
   }
 
-  registerShare(postId: number): Observable<Post> {
-    return this.getPostById(postId).pipe(
-      switchMap((post) => this.http.patch<Post>(`${this.postsUrl}/${postId}`, { shareCount: post.shareCount + 1 }))
+  registerShare(targetId: number | string): Observable<Post> {
+    return this.getPostById(targetId).pipe(
+      switchMap((post) => this.http.patch<Post>(`${this.postsUrl}/${targetId}`, { shareCount: post.shareCount + 1 }))
     );
   }
 
-  reportPost(postId: number): Observable<void> {
-    return this.http.delete<void>(`${this.postsUrl}/${postId}`);
+  reportPost(targetId: number | string): Observable<void> {
+    return this.http.delete<void>(`${this.postsUrl}/${targetId}`);
   }
 
-  deletePost(postId: number): Observable<void> {
-    return this.http.delete<void>(`${this.postsUrl}/${postId}`);
+  deletePost(targetId: number | string): Observable<void> {
+    return this.http.delete<void>(`${this.postsUrl}/${targetId}`);
   }
 
-  incrementCommentCount(postId: number, delta: number): Observable<Post> {
-    return this.getPostById(postId).pipe(
+  incrementCommentCount(targetId: number | string, delta: number): Observable<Post> {
+    return this.getPostById(targetId).pipe(
       switchMap((post) =>
-        this.http.patch<Post>(`${this.postsUrl}/${postId}`, { commentCount: post.commentCount + delta })
+        this.http.patch<Post>(`${this.postsUrl}/${targetId}`, { commentCount: post.commentCount + delta })
       )
+    );
+  }
+
+  createPost(newPostData: Partial<Post>): Observable<Post> {
+    const newId = Date.now();
+    const postPayload: Post = {
+      id: newId,
+      postId: newId,
+      userName: newPostData.userName || 'Aarav Sharma',
+      tinyProfilePic: newPostData.tinyProfilePic || 'https://i.pravatar.cc/100?img=1',
+      profilePic: newPostData.profilePic || 'https://i.pravatar.cc/300?img=1',
+      images: newPostData.images && newPostData.images.length ? newPostData.images : ['assets/images/templates/Preview1.webp'],
+      description: newPostData.description || 'Wishing you a very Happy Birthday! 🎉',
+      tag: newPostData.tag || 'Birthday Wishes',
+      likes: 0,
+      likeByMe: false,
+      shareCount: 0,
+      commentCount: 0,
+      postCreationOrModificationDate: new Date().toISOString(),
+      isMine: true
+    };
+    return this.http.post<Post>(this.postsUrl, postPayload).pipe(
+      tap((createdPost) => this.postCreatedSource.next(createdPost))
     );
   }
 }

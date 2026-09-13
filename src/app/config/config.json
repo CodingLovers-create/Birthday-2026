@@ -1,0 +1,245 @@
+{
+    "currentLanguage": "eng",
+    "eng": {
+        "internet": {
+            "text": "No Internet connection. Please check your Internet or Wifi connection."
+        },
+        "templatePage": {
+            "header": "AI Shubhkamna",
+            "infoText": "",
+            "infoText1": "",
+            "italicSymbol": "",
+            "infoText2": "Join the nation in wishing PM Modi on his Birthday",
+            "infoText3": "Craft your personalised card and make PM Modi's birthday a moment to remember!",
+            "instruction": "Choose a frame",
+            "templates": [
+                {
+                    "id": "1",
+                    "heading": "Template 1",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "1",
+                    "src": "templates/Template1.webp",
+                    "srcPreview": "templates/Preview1.webp"
+                },
+                {
+                    "id": "2",
+                    "heading": "Template 2",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "2",
+                    "src": "templates/Template2.webp",
+                    "srcPreview": "templates/Preview2.webp"
+                },
+                {
+                    "id": "3",
+                    "heading": "Template 3",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "3",
+                    "src": "templates/Template3.webp",
+                    "srcPreview": "templates/Preview3.webp"
+                },
+                {
+                    "id": "4",
+                    "heading": "Template 4",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "4",
+                    "src": "templates/Template4.webp",
+                    "srcPreview": "templates/Preview4.webp"
+                },
+                {
+                    "id": "5",
+                    "heading": "Template 5",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "5",
+                    "src": "templates/Template5.webp",
+                    "srcPreview": "templates/Preview5.webp"
+                },
+                {
+                    "id": "6",
+                    "heading": "Template 6",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "6",
+                    "src": "templates/Template6.webp",
+                    "srcPreview": "templates/Preview6.webp"
+                },
+                {
+                    "id": "7",
+                    "heading": "Template 7",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "7",
+                    "src": "templates/Template7.webp",
+                    "srcPreview": "templates/Preview7.webp"
+                },
+                {
+                    "id": "8",
+                    "heading": "Template 8",
+                    "isUserForeground": 0,
+                    "celebrityIDs": "8",
+                    "src": "templates/Template8.webp",
+                    "srcPreview": "templates/Preview8.webp"
+                }
+            ],
+            "sloganHeader": "Slogans",
+            "sloganList": [
+                {
+                    "id": "1",
+                    "sloganText": "Vikas Bhi, Virasat Bhi"
+                },
+                {
+                    "id": "2",
+                    "sloganText": "Bharat's Heritage, My Pride"
+                },
+                {
+                    "id": "3",
+                    "sloganText": "Desh Ki Virasat Par Gaurav"
+                },
+                {
+                    "id": "4",
+                    "sloganText": "Celebrating World Heritage Day!"
+                },
+                {
+                    "id": "5",
+                    "sloganText": "Taking pride in India's heritage"
+                }
+            ],
+            "nextStepBtns": {
+                "button_1": "Capture",
+                "button_2": "Upload"
+            },
+            "exploreText1": "Explore ",
+            "redirectText": "Media Wall",
+            "exploreText2": "",
+            "displayLabel": "Display name on the photo",
+            "sloganLabel": "Slogan for the poster",
+            "editName": "Display name on the photo",
+            "errorMessage": "Maximum character limit exceeded",
+            "nameErrorBtns": {
+                "button_1": "Back",
+                "button_2": "Confirm"
+            },
+            "errorIconPath": "assets/images/alert_popup.png"
+        },
+        "createPostPage": {
+            "header": "AI Shubhkamna",
+            "title": "Here is your Poster",
+            "caption": {
+                "captionTitle": "Wishes for PM Modi",
+                "captionPlaceholder": "Write your birthday wish for PM Modi",
+                "caption_hashtag": "#HappyBirthdayPMModi #HappyBirthdayModiJi",
+                "inspire_me": "Inspire me"
+            },
+            "buttons": {
+                "button_1": "Retake",
+                "button_2": "Post"
+            },
+            "gallery_btn": "Reupload",
+            "errorMessage": "Maximum character limit exceeded",
+            "noFaceErrorMessage": "No face detected",
+            "multipleFaceErrorMessage": "Multiple faces detected",
+            "imageUploadErrorHead": "Image Upload Error",
+            "imageUploadErrorMessage_1": "We couldn't process your image",
+            "imageUploadErrorMessage_2": "Please try uploading a different one",
+            "fileSizeErrorMessage_1": "The file size exceeds the limit",
+            "fileSizeErrorMessage_2": "Please upload a smaller file and try again",
+            "genericErrorMessage_1": "Oops, something went wrong.",
+            "genericErrorMessage_2": "Please try again after sometime.",
+            "fileFormatErrorHead": "File Format Error",
+            "fileFormatErrorMessage_1": "The selected file is not in a supported format.",
+            "fileFormatErrorMessage_2": "Please choose an image file and try again.",
+            "isPerfectImageMessage_1": "Your poster can be improved!",
+            "isPerfectImageMessage_2": "Please upload a photo showing your upper body in full.",
+            "errorExitButtons": {
+                "button_1": "Home",
+                "button_2": "Retake"
+            },
+            "warnExitButtons": {
+                "button_1": "Ignore",
+                "button_2": "Retake"
+            },
+            "exitPopupText": "All your progress will be lost, do you want to go back?",
+            "exitButtons": {
+                "button_1": "No",
+                "button_2": "Yes"
+            },
+            "crossIcon": "assets/images/crossIcon.png",
+            "greenRadio": "assets/images/greenRadio.png",
+            "whiteRadio": "assets/images/whiteRadio.png",
+            "wishesHeader": "Popular Messages",
+            "wishesList": [
+                {
+                    "id": "1",
+                    "wishText": "Happy Birthday to the Prime Minister who connects with Gen Z like no other!"
+                },
+                {
+                    "id": "2",
+                    "wishText": "Warm birthday wishes to the Sevak who always puts India First. Happy Birthday, PM Modi!"
+                },
+                {
+                    "id": "3",
+                    "wishText": "Birthday wishes to our Pradhan Sevak, who has taken Make in India to greater heights."
+                },
+                {
+                    "id": "4",
+                    "wishText": "Birthday wishes to the leader who has placed Nari Shakti at the heart of India's progress. Happy Birthday, PM Modi!"
+                },
+                {
+                    "id": "5",
+                    "wishText": "Your vision inspires us every day to build a stronger Aatmanirbhar Bharat. Happy Birthday, PM Modi!"
+                }
+            ],
+            "confirmHeading": "The existing text will be replaced with the selected one. Do you wish to proceed?",
+            "confirmYes": "Yes",
+            "confirmNo": "No"
+        },
+        "instructionsPage": {
+            "textMain": "For best experience, capture or upload your picture",
+            "text1a": "1. Using ",
+            "text1b": "back camera",
+            "text1c": " & avoid selfies",
+            "text2a": "2. From your ",
+            "text2b": "head to waist",
+            "text3": "3. In portrait orientation",
+            "text4": "4. With a plain background",
+            "text5": "5. With only you in the frame",
+            "text6": "6. Without any objects, animals or filters",
+            "heading": "Tips for a Perfect Photo",
+            "header": "AI Shubhkamna",
+            "button": "Proceed"
+        },
+        "certificatePage": {
+            "header": "AI Shubhkamna",
+            "title": "Congratulations!",
+            "description": "You have successfully snapped a selfie with PM Modi at Bharat's iconic heritage sites.",
+            "subDescription": "Proud guardian of Bharat's timeless culture and historic pride.",
+            "badgeTextA": "You have earned the",
+            "badgeTextB": " Badge",
+            "badgeName": "\"Dharohar Promoter\"",
+            "badgeImg": "certificate/badge.png",
+            "pointImg": "certificate/points.png",
+            "shareBtn": "Share +1",
+            "downloadBtn": "Download",
+            "mediaWallRedirect": "Go to media wall"
+        },
+        "cameraLoader": {
+            "cancel_wait": "Please wait",
+            "cancel_text": "If you want to go back",
+            "cancel_btn": "Click here",
+            "uploading": "Uploading",
+            "uploaded": "Uploaded",
+            "processing": "Processing",
+            "processed": "Processed",
+            "info_text": "Creating your perfect photo",
+            "wait_text": "It is worth the wait!"
+        },
+        "fileSizeError": {
+            "line_1": "The file size exceeds the limit.",
+            "line_2_a": "Please upload a smaller file and try again.",
+            "line_2_b": "",
+            "btn_text": "Go Back"
+        },
+        "exitPopup": {
+            "popupText": "Are you sure you want to Exit?",
+            "yesButton": "Yes",
+            "noButton": "No"
+        }
+    }
+}

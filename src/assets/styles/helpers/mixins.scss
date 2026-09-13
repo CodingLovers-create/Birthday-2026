@@ -1,0 +1,109 @@
+@import "./fonts.scss";
+
+$basePath: "/assets/images/";
+$primary-font-family: "P-400";
+$primary-font-size: 14;
+$primary-font-size-value: 14;
+
+
+@mixin flex-container($align: center, $justify: center, $direction: row) {
+    display: flex;
+    align-items: $align;
+    justify-content: $justify;
+    flex-direction: $direction;
+}
+
+@mixin positioning() {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+
+@mixin font($minimum, $preffered, $maximum, $color: #000, $family: P-400) {
+
+    $minimum: $minimum/$primary-font-size-value + rem;
+    $maximum: $maximum/$primary-font-size-value + rem;
+
+    @if ($family==P-400) {
+        font-family: "P-400";
+    } 
+    @else if ($family==P-500) {
+        font-family: "P-500";
+    } 
+    @else if ($family==P-600) {
+        font-family: "P-600";
+    } 
+    @else if ($family==P-700) {
+        font-family: "P-700";
+    } 
+    @else if ($family==P-800) {
+        font-family: "P-800";
+    } 
+    @else if ($family==P-900) {
+        font-family: "P-900";
+    }
+    @else if ($family==N-400) {
+        font-family: "N-400";
+    } 
+    @else if ($family==N-500) {
+        font-family: "N-500";
+    } 
+    @else if ($family==N-600) {
+        font-family: "N-600";
+    } 
+    @else if ($family==N-700) {
+        font-family: "N-700";
+    } 
+    @else if ($family==N-800) {
+        font-family: "N-800";
+    } 
+    @else if ($family==N-900) {
+        font-family: "N-900";
+    }
+    @else if ($family==PD-400) {
+        font-family: "PD-400";
+    }
+    @else if ($family==PD-500) {
+        font-family: "PD-500";
+    }
+    @else if ($family==PD-600) {
+        font-family: "PD-600";
+    }
+    @else if ($family==PD-700) {
+        font-family: "PD-700";
+    }
+    @else if ($family==PD-800) {
+        font-family: "PD-800";
+    }
+    @else if ($family==PD-900) {
+        font-family: "PD-900";
+    }
+    @else if ($family==S-300) {
+        font-family: "S-300";
+    }
+    @else if ($family==S-400) {
+        font-family: "S-400";
+    }
+    @else if ($family==S-500) {
+        font-family: "S-500";
+    }
+    @else if ($family==S-700) {
+        font-family: "S-700";
+    }
+    @else if ($family==S-900) {
+        font-family: "S-900";
+    }
+
+    color: $color;
+    font-size: clamp(#{$minimum}, #{$preffered}, #{$maximum});
+}
+
+@mixin bg-image($path, $size: cover) {
+    background-image: url($basePath + $path);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: $size;
+}

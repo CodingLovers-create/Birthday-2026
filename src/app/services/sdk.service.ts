@@ -10,4 +10,12 @@ export class SdkService {
   shareImage(description: string, imageUrl: string): void {
     console.log('[SdkService] shareImage', { type: 'share', desc: description, imageUrl });
   }
+
+  openCamera(): void {
+    console.log('[SdkService] openCamera');
+  }
+
+  openGallery(): void {
+    console.log('[SdkService] openGallery');
+  }
 }

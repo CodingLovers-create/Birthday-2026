@@ -1,0 +1,324 @@
+<div class="create-post-maincontainer">
+    <div class="header-container">
+        <div class="back-button-container">
+            <div class="back-btn-wrapper">
+                <img src="assets/images/icons/back.png" alt="back" class="img" (click)="back()" id="back-btn">
+            </div>
+        </div>
+
+        <div class="header-text-container">
+            <div class="header-text">{{moduleHeaderTitle || config?.createPostPage?.header || 'Create Post'}}</div>
+        </div>
+    </div>
+
+    <div class="post-container-wrapper">
+
+        <div class="post-container">
+            <div class="template-wrapper">
+                <div class="template-outer-container">
+                    <div class="template-img cursor-pointer" #certificate (click)="triggerImagePicker()" style="position: relative;">
+                        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;" />
+
+                        <img class="loader-gif" *ngIf="!imageLoaded && !this.dataService.apiResponseError.value" src="assets/images/heritage/loader.gif">
+                        <img [src]="(this.dataService.apiResponseImage | async) || noApiResponseImg" 
+                            class="image" 
+                            (load)="imageLoaded = true" >
+
+                        <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 4px 12px; color: white; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+                            <img src="assets/images/icons/camera.png" style="height: 14px; width: 14px; filter: brightness(0) invert(1);" />
+                            <span>Upload / Change Photo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="caption-post">
+            <div class="description-wrapper">
+                <div class="description-container">
+                    <div class="caption-heading">{{config.createPostPage.caption.captionTitle}}</div>
+                    <div class="caption-container" [ngClass]="{ 'red-border': caption.length > 200 }">
+                        <textarea #captionTextarea name="caption" maxlength="201" class="caption-input"
+                            [(ngModel)]="caption" placeholder="{{ config.createPostPage.caption.captionPlaceholder}}"
+                            (focus)="scrollToTop($event)" (input)="RestrictMoreChar($event)" (blur)="scrollDown()"
+                            (ngModelChange)="filterCaption($event)">
+                        </textarea>
+                        <div class="textarea-bottom">
+                            <div class="hashtag-text">{{moduleHashtag || config?.createPostPage?.caption?.caption_hashtag || '#SevaSankalpAbhiyan'}}</div>
+                            <div class="inspire-text" (click)="openWishesPopup()">
+                                {{config.createPostPage.caption.inspire_me}}</div>
+                        </div>
+                    </div>
+                    <div class="caption-error-container">
+                        <div class="error-msg-container">
+                            <div class="error-msg" *ngIf="showCaptionError">
+                                <div class="icon-wrap">
+                                    <img src="assets/images/error_icon.svg" />
+                                </div>
+                                {{config.createPostPage.errorMessage}}
+                            </div>
+                        </div>
+                        <div class="char-count-container">
+                            <div class="char-count"
+                                [ngStyle]="{'color': captionLength > 200 ? '#D00' : 'rgba(64, 38, 26, 0.60)'}">
+                                {{ captionLength }}/200
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-btn-wrapper">
+                <button class="retake-btn" (click)="retakeBtn()">
+                    <div class="btn-text">{{clickedButton =='camera'? config.createPostPage.buttons.button_1 :
+                        config.createPostPage.gallery_btn}}</div>
+                </button>
+                <button class="post-btn" (click)="onSubmit()" [ngClass]="{ 'yes-disable': caption.length > 200 }"
+                    [disabled]="isSubmitDisabled">
+                    {{config.createPostPage.buttons.button_2}}
+                </button>
+            </div>
+        </div>
+        <div class="extra-space">
+
+        </div>
+    </div>
+</div>
+
+<!-- Back popup (Exit) -->
+<div class="overlay-exit" *ngIf="showExitPopup"></div>
+<div class="exit" *ngIf="showExitPopup">
+    <div class="content">
+        {{config.createPostPage.exitPopupText}}
+    </div>
+    <div class="btns">
+        <div class="no" (click)="confirmNoToHome()">
+            <div class="btn-text">
+                {{config.createPostPage.exitButtons.button_1}}
+            </div>
+        </div>
+        <div class="yes" (click)="confirmYesToHome()">{{config.createPostPage.exitButtons.button_2}}</div>
+    </div>
+</div>
+
+<!-- Producer error Message popup -->
+<div class="overlay-error" *ngIf="apiErrorMessage"></div>
+<div class="error" *ngIf="apiErrorMessage">
+    <!-- 100 - noFaceErrorMessage | 101 - multipleFaceErrorMessage | 201 - imageUploadError (corrupt img) | 11 - imageUploadError (fileSize limit) | 1004 - File Format Error -->
+    <div class="content">
+        <!-- Other Error Icon -->
+        <div class="error-wrap"
+            *ngIf="apiResponseErrorID != 100 && apiResponseErrorID != 101">
+            <img src="assets/images/error_alert.svg">
+        </div>
+        <!-- Error Icon: 100 - noFaceError | 101 - multipleFaceError -->
+        <div class="error-face-wrap"
+            *ngIf="apiResponseErrorID == 100 || apiResponseErrorID == 101">
+            <img src="assets/images/face_id.svg">
+        </div>
+
+        <!-- 100 - noFaceError  Message -->
+        <div class="message" *ngIf="apiResponseErrorID == 100">
+            {{config.createPostPage.noFaceErrorMessage}}</div>
+        <!-- 101 - multipleFaceError Message -->
+        <div class="message" *ngIf="apiResponseErrorID == 101">
+            {{config.createPostPage.multipleFaceErrorMessage}}</div>
+
+        <!-- Message Header - imageUploadError  -->
+        <div class="message-head"
+            *ngIf="apiResponseErrorID == 201 || apiResponseErrorID == 11">
+            {{config.createPostPage.imageUploadErrorHead}}</div>
+        <!-- 201 - imageUploadError (corrupt img) message -->
+        <div class="message" *ngIf="apiResponseErrorID == 201">
+            {{config.createPostPage.imageUploadErrorMessage_1}}<br>{{config.createPostPage.imageUploadErrorMessage_2}}
+        </div>
+        <!-- 11 - imageUploadError (fileSize limit) message -->
+        <div class="message" *ngIf="apiResponseErrorID == 11">
+            {{config.createPostPage.fileSizeErrorMessage_1}}<br>{{config.createPostPage.fileSizeErrorMessage_2}}
+        </div>
+
+        <!-- Message Header - File Format Error -->
+        <div class="message-head" *ngIf="apiResponseErrorID == 1004">
+            {{config.createPostPage.fileFormatErrorHead}}</div>
+        <!-- 1004 - File Format Error message -->
+        <div class="message" *ngIf="apiResponseErrorID == 1004">
+            {{config.createPostPage.fileFormatErrorMessage_1}}<br>{{config.createPostPage.fileFormatErrorMessage_2}}
+        </div>
+
+        <!-- Generic Error Message -->
+        <div class="message"
+            *ngIf="apiResponseErrorID != 100 && apiResponseErrorID != 101 && apiResponseErrorID != 201 && apiResponseErrorID != 11 && apiResponseErrorID != 1004">
+            {{config.createPostPage.genericErrorMessage_1}}<br>{{config.createPostPage.genericErrorMessage_2}}
+        </div>
+    </div>
+
+    <!-- Specific Error User Options -->
+    <div class="btns"
+        *ngIf="apiResponseErrorID == 100 || apiResponseErrorID == 101 || apiResponseErrorID == 201 || apiResponseErrorID == 1004">
+        <div class="home" (click)="goToHomeBtn()">
+            <div class="btn-text">{{config.createPostPage.errorExitButtons.button_1}}</div>
+        </div>
+        <div class="retake" (click)="retakeBtn()">{{clickedButton =='camera'?
+            config.createPostPage.errorExitButtons.button_2 : config.createPostPage.gallery_btn}}</div>
+    </div>
+    <!-- 11 - imageUploadError (fileSize limit) User Options -->
+    <div class="btns justify-around"
+        *ngIf="apiResponseErrorID == 11">
+        <div class="gen-home" (click)="goToHomeBtnNoConfirm()">
+            <div class="btn-text">Go Back</div>
+        </div>
+    </div>
+    <!-- Generic Error User Options -->
+    <div class="btns justify-around"
+        *ngIf="apiResponseErrorID != 100 && apiResponseErrorID != 101 && apiResponseErrorID != 201 && apiResponseErrorID != 11 && apiResponseErrorID != 1004">
+        <div class="gen-home" (click)="goToHomeBtnNoConfirm()">
+            <div class="btn-text">{{config.createPostPage.errorExitButtons.button_1}}</div>
+        </div>
+    </div>
+</div>
+
+<!-- File Error Message popup -->
+<!-- <div class="overlay-error" *ngIf="showFileError">
+</div>
+<div class="file-error" *ngIf="showFileError">
+    <div class="content">
+        <div class="error-wrap">
+            <img src="assets/images/error_alert.svg">
+        </div>
+        <div class="message-head">
+            FE {{config.createPostPage.imageUploadErrorHead}}
+        </div>
+        <div class="message">
+            {{config.createPostPage.fileSizeErrorMessage_1}}<br>{{config.createPostPage.fileSizeErrorMessage_2}}
+        </div>
+    </div>
+    <div class="btns">
+        <div class="yes" (click)="closeFileError()">
+            <div class="btn-text">{{config.fileSizeError.btn_text}}</div>
+        </div>
+    </div>
+</div> -->
+
+<!-- Consumer error Message popup - isPerfectImageShowError -->
+<div class="overlay-warn" *ngIf="isPerfectImageShowError"></div>
+<div class="warn" *ngIf="isPerfectImageShowError">
+    <div class="content">
+        <div class="error-wrap">
+            <img src="assets/images/heritage/error_warn.svg">
+        </div>
+        <div class="message">
+            {{config.createPostPage.isPerfectImageMessage_1}}<br>{{config.createPostPage.isPerfectImageMessage_2}}
+        </div>
+    </div>
+    <div class="btns">
+        <div class="ignore" (click)="closeIsPerfectImageShowError()">
+            <div class="btn-text">{{config.createPostPage.warnExitButtons.button_1}}</div>
+        </div>
+        <div class="retake" (click)="retakeBtn()">{{clickedButton =='camera'?
+            config.createPostPage.warnExitButtons.button_2 : config.createPostPage.gallery_btn}}</div>
+    </div>
+</div>
+
+<!-- Camera upload Loader -->
+<div class="overlay-loader" *ngIf="showCamUploadLoader">
+</div>
+<div class="popup_cam" *ngIf="showCamUploadLoader">
+    <div class="content">
+        <div class="process-gif" *ngIf="wait_value==0">
+            <div class="gif-wrap">
+                <img class="gif" src="assets/images/processing.gif">
+            </div>
+        </div>
+        <div class="processing-wrap" *ngIf="wait_value==1 || wait_value==2 || wait_value==3">
+            <div class="loader-box">
+                <div class="process-text">
+                    <div class="process-gif gap-right">
+                        <div class="gif-wrap">
+                            <img *ngIf="wait_value==1" class="gif" src="assets/images/processing.gif">
+                            <img *ngIf="wait_value==2" src="assets/images/complete_tick.svg">
+                        </div>
+                    </div>
+                    <div *ngIf="wait_value==1">{{config.cameraLoader.uploading}}</div>
+                    <div *ngIf="wait_value==2">{{config.cameraLoader.uploaded}}</div>
+                </div>
+                <div class="process-text">
+                    <div class="process-gif gap-right">
+                        <div class="gif-wrap">
+                            <img *ngIf="wait_value==1" src="assets/images/process_icon.svg">
+                            <img *ngIf="wait_value==2" src="assets/images/processing.gif">
+                            <img *ngIf="wait_value==3" src="assets/images/complete_tick.svg">
+                        </div>
+                    </div>
+                    <div *ngIf="wait_value==1" class="grey">{{config.cameraLoader.processing}}</div>
+                    <div *ngIf="wait_value==2">{{config.cameraLoader.processing}}</div>
+                    <div *ngIf="wait_value==3">{{config.cameraLoader.processed}}</div>
+                </div>
+            </div>
+            <div class="headline">{{config.cameraLoader.info_text}}</div>
+            <div class="time-text">{{config.cameraLoader.wait_text}}</div>
+        </div>
+        <div class="cancel-wrap" *ngIf="wait_value==0">
+            <div class="process-text">{{config.cameraLoader.cancel_wait}} ...</div>
+            <div class="abort-wrap">
+                <span class="cancel-text">{{config.cameraLoader.cancel_text}} </span>
+                <span class="cancel-btn" (click)="cancel_loader()">{{config.cameraLoader.cancel_btn}}</span>
+            </div>
+        </div>
+    </div>
+    <div id="camLoaderReset-wait-retake" (click)="forceUpdateLoaderToWait()" [ngStyle]="{'display': 'none'}"></div>
+    <div id="camLoaderReset-upload-retake" (click)="forceUpdateLoaderToUpload()" [ngStyle]="{'display': 'none'}"></div>
+    <div id="camLoaderReset-complete-retake" (click)="forceUpdateLoaderToComplete()" [ngStyle]="{'display': 'none'}">
+    </div>
+    <div id="camLoaderReset-cancel-retake" (click)="forceUpdateLoaderToCancel()" [ngStyle]="{'display': 'none'}"></div>
+    <div id="camLoaderReset-cancelClicked-retake" (click)="forceUpdateCancelClicked()" [ngStyle]="{'display': 'none'}">
+    </div>
+</div>
+
+<!-- processing success popup ALERT-->
+<div class="alert-floater" *ngIf="showAlert">
+    <div class="alert-wrap">
+        <div class="alert-message">The last photo you uploaded has been processed successfully.</div>
+        <div class="crossIcon" (click)="toggleAlertFloater()">
+            <img [src]="config.createPostPage.crossIcon" />
+        </div>
+    </div>
+</div>
+
+<!-- Wishes popup -->
+<div class="overlay" *ngIf="showWishesPopup"></div>
+<div class="wishes-container" *ngIf="showWishesPopup">
+    <div class="header-wishes">
+        <div class="text-header">{{ config.createPostPage.wishesHeader}}</div>
+        <div class="crossIcon" (click)="closeWishesPopup()">
+            <img [src]="config.createPostPage.crossIcon" />
+        </div>
+    </div>
+    <div class="wishesList">
+        <div class="wish-wrapper" *ngFor="let wish of config.createPostPage.wishesList; let i = index">
+            <div class="wishItem" (click)="selectWish(i)">
+                <div class="wishText">
+                    {{ wish.wishText }}
+                </div>
+                <div class="radioIcon">
+                    <div class="radio" [class.selected]="selectedWishIndex === i"></div>
+                </div>
+            </div>
+            <div class="line"></div>
+        </div>
+    </div>
+</div>
+<!-- Confirm wish popup -->
+<div class="overlay-confirm" *ngIf="showConfirmationPopup"></div>
+<div class="confirmation-popup" *ngIf="showConfirmationPopup">
+    <div class="heading-confirm">{{ config.createPostPage.confirmHeading }}</div>
+    <div class="button-confirm">
+        <div class="no-btn" (click)="confirmWishSelection(false)">
+            <div class="btn-text">{{config.createPostPage.confirmNo}}</div>
+        </div>
+        <div class="yes-btn" (click)="confirmWishSelection(true)">{{config.createPostPage.confirmYes}}</div>
+    </div>
+</div>
+
+<!-- Force Routes -->
+<div id="retake-route-to-createpost" (click)="forceRoutetoCreatePost()" [ngStyle]="{'display': 'none'}"></div>
+<div id="createPost-route-to-preview" (click)="forceRoutetoPreview()" [ngStyle]="{'display': 'none'}"></div>

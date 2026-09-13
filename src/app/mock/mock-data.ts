@@ -1,1 +1,1 @@
-export const TAGS = ['Birthday Wishes', 'Cake & Sweets', 'Party Time', 'Gifts', 'Memories'];
+export const TAGS = ['Seva Mera Yogdan', 'AI Shubhkamna', 'Aashirwad Ka Diya', 'Seva Ke Rang, Rashtra Ke Sang', 'Seva Ki Kahani', 'Birthday Wishes', 'Cake & Sweets', 'Party Time', 'Gifts', 'Memories'];

@@ -101,17 +101,36 @@ export class PostCardComponent {
   }
 
   toggleLike(): void {
+    const targetId = this.post().id !== undefined ? this.post().id! : this.post().postId;
+
+    const current = this.post();
+    const optimisticUpdated: Post = {
+      ...current,
+      likeByMe: !current.likeByMe,
+      likes: current.likes + (current.likeByMe ? -1 : 1)
+    };
+    this.updated.emit(optimisticUpdated);
+
     this.postsService
-      .toggleLike(this.post().postId)
+      .toggleLike(targetId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((updated) => this.updated.emit(updated));
+      .subscribe({
+        next: (serverUpdated) => this.updated.emit(serverUpdated),
+        error: (err) => {
+          console.warn('[PostCardComponent] toggleLike backend notice:', err);
+        }
+      });
   }
 
   share(): void {
+    const targetId = this.post().id !== undefined ? this.post().id! : this.post().postId;
     this.postsService
-      .registerShare(this.post().postId)
+      .registerShare(targetId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((updated) => this.updated.emit(updated));
+      .subscribe({
+        next: (updated) => this.updated.emit(updated),
+        error: () => {}
+      });
 
     const shareText = `${this.post().userName}'s birthday post: ${this.post().description}`;
     this.sdkService.shareImage(shareText, this.post().images[this.currentImageIndex()]);

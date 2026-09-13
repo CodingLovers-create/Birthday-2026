@@ -1,4 +1,5 @@
 export interface Post {
+  id?: number | string;
   postId: number;
   userName: string;
   tinyProfilePic: string;

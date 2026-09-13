@@ -50,6 +50,12 @@ export class WallComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadFeed(true);
+
+    this.postsService.postCreated$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((newPost) => {
+        this.posts.update((current) => [newPost, ...current]);
+      });
   }
 
   get isFilterApplied(): boolean {
@@ -101,6 +107,10 @@ export class WallComponent implements OnInit {
 
   goToProfile(): void {
     this.router.navigate(['/profile']);
+  }
+
+  goToCreatePost(): void {
+    this.router.navigate(['/create-post']);
   }
 
   applyFilter(filter: FilterState): void {
