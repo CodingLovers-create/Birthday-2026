@@ -10,38 +10,47 @@ $bg: #FAEDE1;
 $hairline: #D4CCC5;
 $danger: #DD0000;
 
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 100%;
+  width: 100%;
+}
+
 .create-post-maincontainer {
     width: 100%;
-    height: 100%;
-    @include flex-container(center, center, column);
+    min-height: 100%;
+    flex: 1 1 auto;
+    @include flex-container(center, flex-start, column);
     @include bg-image("bg/bg_pattern.png");
     background-color: $bg;
 
     .header-container {
         position: relative;
         width: 100%;
-        height: 7%;
-        @include flex-container(center, flex-start);
-        background: #FFFFFF33;
-
-        &::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 1.5px;
-            background: linear-gradient(90deg, rgba(217, 107, 56, 0) 0%, $accent 50%, rgba(217, 107, 56, 0) 100%);
-        }
+        height: 48px;
+        min-height: 48px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
 
         .back-button-container {
-            margin-left: 3.3%;
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
             z-index: 1;
 
             .back-btn-wrapper {
-                width: 1.5rem;
-                height: 1.5rem;
+                width: 20px;
+                height: 20px;
                 display: flex;
+                align-items: center;
+                justify-content: center;
 
                 img {
                     width: 100%;
@@ -56,10 +65,14 @@ $danger: #DD0000;
             left: 0;
             right: 0;
             pointer-events: none;
-            @include flex-container();
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             .header-text {
-                @include font(14, 4.3vw, 15, $ink, PD-500);
+                font-size: 16px;
+                font-weight: 800;
+                color: #000000;
             }
         }
     }
@@ -69,6 +82,7 @@ $danger: #DD0000;
         width: 100%;
         display: flex;
         flex-direction: column;
+        padding-top: 1.25rem;
 
         .post-container {
             flex-grow: 1;
@@ -228,6 +242,9 @@ $danger: #DD0000;
 
             .post-btn-wrapper {
                 width: 100%;
+                margin-top: 1.25rem;
+                margin-bottom: 2rem;
+                padding: 0.5rem 0;
                 @include flex-container(flex-start, center);
 
                 .retake-btn,

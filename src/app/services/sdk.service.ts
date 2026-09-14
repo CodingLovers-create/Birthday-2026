@@ -8,14 +8,22 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class SdkService {
   shareImage(description: string, imageUrl: string): void {
-    console.log('[SdkService] shareImage', { type: 'share', desc: description, imageUrl });
+    console.log('[SdkService] shareImage called', { type: 'share', desc: description, imageUrl });
   }
 
   openCamera(): void {
-    console.log('[SdkService] openCamera');
+    console.log('[SdkService] openCamera called');
   }
 
   openGallery(): void {
-    console.log('[SdkService] openGallery');
+    console.log('[SdkService] openGallery called');
+  }
+
+  closeWebview(): void {
+    console.log('[SdkService] closeWebview called');
+  }
+
+  informationNeeded(type: string, url: string): void {
+    console.log('[SdkService] informationNeeded called', { type, url });
   }
 }

@@ -1,8 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #faf0e8;
+  background-color: #18181b;
+  color: #191919;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+app-template, app-create-post, app-main-dashboard, app-wall, app-profile, app-seva-ki-kahani {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 100%;
+  width: 100%;
 }

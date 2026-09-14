@@ -1,0 +1,120 @@
+:host {
+  display: block;
+}
+
+.popup-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background-color: rgba(25, 25, 25, 0.7);
+
+  .popup-sheet-container {
+    width: 100%;
+    max-width: 512px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    background-color: #ffffff;
+    padding: 20px;
+    box-sizing: border-box;
+
+    .sheet-title-row {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .popup-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #40261A;
+        margin: 0;
+      }
+
+      .close-icon-btn {
+        font-size: 16px;
+        color: rgba(25, 25, 25, 0.4);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+    }
+
+    .section-label {
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #E96A3B;
+    }
+
+    .tags-chips-grid {
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .tag-chip-btn {
+        border-radius: 9999px;
+        border: 1px solid #e5e5e5;
+        padding: 6px 12px;
+        font-size: 14px;
+        color: rgba(25, 25, 25, 0.7);
+        background-color: transparent;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        &.selected {
+          border-color: #E96A3B;
+          background-color: rgba(233, 106, 59, 0.1);
+          color: #E96A3B;
+        }
+      }
+    }
+
+    .buttons-action-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+
+      .btn-col {
+        display: flex;
+        width: 50%;
+        justify-content: center;
+
+        .btn-reset {
+          width: 80%;
+          border-radius: 9999px;
+          border: 1px solid #E96A3B;
+          padding: 12px 0;
+          font-size: 14px;
+          font-weight: 500;
+          color: #E96A3B;
+          background-color: transparent;
+          cursor: pointer;
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        .btn-apply {
+          width: 80%;
+          border-radius: 9999px;
+          background-color: #E96A3B;
+          padding: 12px 0;
+          font-size: 14px;
+          font-weight: 500;
+          color: #ffffff;
+          border: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

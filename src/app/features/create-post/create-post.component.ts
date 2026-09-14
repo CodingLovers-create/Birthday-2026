@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Elem
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 
 import constants from '../../constants/constants';
 import { AuditLogsService } from '../../services/audit-logs.service';
@@ -17,13 +17,14 @@ import { SdkService } from '../../services/sdk.service';
 import { TokenService } from '../../services/token.service';
 import { Config } from '../../types/Config';
 import { LanguageCode } from '../../types/LanguageTypes';
+import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 import { ApiResponse, SubmitSelfieResponse } from '../../types/RequestResponseTypes';
 import { Template } from '../../types/Template';
 
 @Component({
   selector: 'app-create-post',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PageHeaderComponent],
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -131,7 +132,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   wait_value: number = 0;
 
 
-  createPostEntryTime!: Date;
+  createPostEntryTime: Date = new Date();
 
   // INSPIRE ME
   showWishesPopup: boolean = false;
@@ -163,9 +164,15 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         }
       });
     const currentTpl = this.dataService.getCurrentTemplate();
-    this.noApiResponseImg = (currentTpl && currentTpl.srcPreview) 
-      ? (constants.imageAssetHost ? constants.imageAssetHost + currentTpl.srcPreview : currentTpl.srcPreview)
-      : 'assets/images/templates/Preview1.webp';
+    let previewPath = currentTpl?.srcPreview || 'assets/images/templates/Preview1.webp';
+    if (!previewPath.startsWith('http://') && !previewPath.startsWith('https://') && !previewPath.startsWith('assets/') && !previewPath.startsWith('/assets/')) {
+      if (previewPath.startsWith('templates/')) {
+        previewPath = 'assets/images/' + previewPath;
+      } else {
+        previewPath = 'assets/images/templates/' + previewPath;
+      }
+    }
+    this.noApiResponseImg = constants.imageAssetHost ? constants.imageAssetHost + previewPath : previewPath;
     // if (!this.dataService.reload) {
       // this.dataService.createPostEntryTime.next(Date.now());
       this.createPostEntryTime = new Date;
@@ -279,32 +286,29 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   }
 
-  imageUrlToBase64(imageUrl: string): Promise<string> {
-    return this.http
-      .get(imageUrl, { responseType: 'blob' })
-      .toPromise()
-      .then((blob: Blob | undefined) => {
-        return this.blobToBase64(blob);
-      })
-      .catch((error) => {
+  imageUrlToBase64(imageUrl: string): Observable<string> {
+    return this.http.get(imageUrl, { responseType: 'blob' }).pipe(
+      switchMap((blob: Blob | undefined) => this.blobToBase64(blob)),
+      catchError((error) => {
         console.error('Error fetching or converting the image:', error);
-        return '';
-      });
+        return of('');
+      })
+    );
   }
 
-  async blobToBase64(blob: Blob | undefined): Promise<string> {
+  private blobToBase64(blob: Blob | undefined): Observable<string> {
     if (!blob) {
-      return 'Invalid blob';
+      return of('Invalid blob');
     }
-    const buffer = await blob.arrayBuffer();
-    const base64String = btoa(
-      new Uint8Array(buffer).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        ''
-      )
-    );
-    // console.log(base64String);
-    return `data:${blob.type};base64,${base64String}`;
+    return new Observable((observer) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        observer.next((reader.result as string) || '');
+        observer.complete();
+      };
+      reader.onerror = (err) => observer.error(err);
+      reader.readAsDataURL(blob);
+    });
   }
 
   back() {
@@ -409,6 +413,9 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.dataService.apiResponseError.next('');
     this.dataService.apiResponseErrorID.next(null);
     this.dataService.postCaption.next('');
+    this.caption = '';
+    this.captionLength = 0;
+    this.removePhoto();
     if (this.dataService.isPerfectImageShowError.value) {
       this.dataService.isPerfectImageShowError.next(false); //close isPerfectImageShowError popup if open
     }
@@ -503,8 +510,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     }
   }
 
-  compressImage(base64Str: string, maxWidth = 800, maxHeight = 800, quality = 0.7): Promise<string> {
-    return new Promise((resolve) => {
+  compressImage(base64Str: string, maxWidth = 800, maxHeight = 800, quality = 0.7): Observable<string> {
+    return new Observable((observer) => {
       const img = new Image();
       img.src = base64Str;
       img.onload = () => {
@@ -527,13 +534,30 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', quality));
+          observer.next(canvas.toDataURL('image/jpeg', quality));
         } else {
-          resolve(base64Str);
+          observer.next(base64Str);
         }
+        observer.complete();
       };
-      img.onerror = () => resolve(base64Str);
+      img.onerror = () => {
+        observer.next(base64Str);
+        observer.complete();
+      };
     });
+  }
+
+  removePhoto(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.dataService.apiResponseImage.next('');
+    this.dataService.image.next('');
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
+    this.imageLoaded = false;
+    this.cdr.detectChanges();
   }
 
   onFileSelected(event: Event): void {
@@ -541,40 +565,47 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     if (target.files && target.files[0]) {
       const file = target.files[0];
       const reader = new FileReader();
-      reader.onload = async (e: ProgressEvent<FileReader>) => {
+      reader.onload = (e: ProgressEvent<FileReader>) => {
         const rawBase64 = e.target?.result as string;
         if (rawBase64) {
-          const compressedBase64 = await this.compressImage(rawBase64);
-          this.dataService.apiResponseImage.next(compressedBase64);
-          this.dataService.apiResponseError.next('');
-          this.dataService.apiResponseErrorID.next(null);
-          this.dataService.apiResponsePopup.next(false);
-          this.imageLoaded = true;
-          this.cdr.detectChanges();
+          this.compressImage(rawBase64).subscribe((compressedBase64) => {
+            this.dataService.apiResponseImage.next(compressedBase64);
+            this.dataService.apiResponseError.next('');
+            this.dataService.apiResponseErrorID.next(null);
+            this.dataService.apiResponsePopup.next(false);
+            this.imageLoaded = true;
+            this.cdr.detectChanges();
+          });
         }
       };
       reader.readAsDataURL(file);
+      target.value = '';
     }
   }
 
   openCamera() {
+    console.log('[CreatePostComponent] Calling SDK: sdkService.openCamera()');
+    this.sdkService.openCamera();
     this.triggerImagePicker();
   }
 
   openGallery() {
+    console.log('[CreatePostComponent] Calling SDK: sdkService.openGallery()');
+    this.sdkService.openGallery();
     this.triggerImagePicker();
   }
 
   routetotemplate() {
-    // window.scrollTo(0, 0);
-    // window.scrollBy(0, 1);
     this.dataService.isCameraButtonClicked = false;
     this.dataService.apiResponseImage.next('');
     this.dataService.apiResponseError.next('');
     this.dataService.apiResponseErrorID.next(null);
     this.dataService.image.next('');
+    this.dataService.postCaption.next('');
+    this.caption = '';
+    this.captionLength = 0;
 
-    this.router.navigate(['/wall']);
+    this.router.navigate(['/main']);
   }
 
   filterCaption(event: Event) {
@@ -643,6 +674,9 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     let imageURL = this.dataService.apiResponseImage.value || 'assets/images/templates/Preview1.webp';
     let caption: string = this.caption.trimStart().trimEnd().replace(/(\r?\n){3,}/g, '\n\n');
 
+    console.log('[CreatePostComponent] Triggering SDK call: sdkService.shareImage()', { description: caption, imageURL });
+    this.sdkService.shareImage(caption, imageURL);
+
     this.postsService.createPost({
       description: caption || 'Wishing you a very Happy Birthday! 🎉',
       images: [imageURL],
@@ -652,11 +686,13 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         this.dataService.isCameraButtonClicked = false;
         this.isSubmitDisabled = false;
         this.dataService.postCaption.next('');
+        this.removePhoto();
         this.dataService.isEntryLoaderActive.next(false);
         this.router.navigate(['/wall']);
       },
       error: (e: any) => {
         console.error(e);
+        this.removePhoto();
         this.dataService.isEntryLoaderActive.next(false);
         this.router.navigate(['/wall']);
       }

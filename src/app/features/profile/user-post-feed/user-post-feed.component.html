@@ -1,8 +1,8 @@
-<div class="mx-auto min-h-screen max-w-lg bg-surface pb-8">
+<div class="user-post-feed-container">
   <app-page-header title="My Posts" (back)="goBack()"></app-page-header>
 
-  <main class="px-0 pt-2">
-    <p *ngIf="isLoading()" class="py-16 text-center text-sm text-ink/40">Loading…</p>
+  <main class="feed-main">
+    <p *ngIf="isLoading()" class="loading-state-text">Loading…</p>
 
     <div *ngFor="let post of posts()" #postAnchor>
       <app-post-card

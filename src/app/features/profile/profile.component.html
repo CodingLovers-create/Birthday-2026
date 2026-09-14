@@ -1,35 +1,35 @@
-<div class="mx-auto min-h-screen max-w-lg bg-surface pb-8">
+<div class="profile-main-container">
   <app-page-header title="Profile" (back)="goBack()"></app-page-header>
 
-  <div class="flex flex-col items-center gap-2 px-4 pb-4 pt-6">
-    <img [src]="profileAvatar" [alt]="profileName" class="h-16 w-16 rounded-full border border-neutral-100 object-cover" />
-    <h2 class="font-bold text-heading">{{ profileName | capitalizeFirst | nameFormatter }}</h2>
+  <div class="profile-header-card">
+    <img [src]="profileAvatar" [alt]="profileName" class="avatar-img" />
+    <h2 class="profile-name">{{ profileName | capitalizeFirst | nameFormatter }}</h2>
   </div>
 
-  <div class="mx-4 flex items-center justify-around rounded-2xl border border-heading px-2 py-3 text-heading">
-    <div class="flex-1 text-center text-sm font-semibold">
+  <div class="stats-counter-bar">
+    <div class="stat-item">
       {{ posts().length | numberRoundoff }} {{ posts().length === 1 ? 'Post' : 'Posts' }}
     </div>
-    <div class="h-4 w-px bg-heading"></div>
-    <div class="flex-1 text-center text-sm font-semibold">{{ totalLikes | numberRoundoff }} Likes</div>
-    <div class="h-4 w-px bg-heading"></div>
-    <div class="flex-1 text-center text-sm font-semibold">{{ totalShares | numberRoundoff }} Shares</div>
+    <div class="divider"></div>
+    <div class="stat-item">{{ totalLikes | numberRoundoff }} Likes</div>
+    <div class="divider"></div>
+    <div class="stat-item">{{ totalShares | numberRoundoff }} Shares</div>
   </div>
 
-  <p *ngIf="isLoading()" class="py-16 text-center text-sm text-ink/40">Loading your posts…</p>
+  <p *ngIf="isLoading()" class="loading-state-text">Loading your posts…</p>
 
-  <p *ngIf="!isLoading() && posts().length === 0" class="px-6 py-16 text-center text-sm text-ink/40">
+  <p *ngIf="!isLoading() && posts().length === 0" class="empty-state-text">
     You haven't posted any birthday wishes yet.
   </p>
 
-  <div *ngIf="!isLoading() && posts().length > 0" class="mt-4 grid grid-cols-3 gap-0.5 px-0.5">
+  <div *ngIf="!isLoading() && posts().length > 0" class="posts-grid">
     <button
       type="button"
       *ngFor="let post of posts()"
-      class="aspect-square overflow-hidden bg-neutral-100"
+      class="post-thumbnail-btn"
       (click)="openPost(post)"
     >
-      <img [src]="post.images[0]" alt="Post thumbnail" class="h-full w-full object-cover" />
+      <img [src]="post.images[0]" alt="Post thumbnail" class="thumb-img" />
     </button>
   </div>
 </div>

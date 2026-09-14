@@ -1,211 +1,56 @@
-<div class="main-dashboard-container mx-auto min-h-screen max-w-md bg-[#FAF6F0] px-4 pb-12 pt-3 font-sans select-none">
+<div class="main-dashboard-container">
 
-  <!-- Header -->
-  <header class="relative flex items-center justify-center py-2">
-    <button (click)="goBack()" class="absolute left-0 flex h-9 w-9 items-center justify-center rounded-full border border-black/20 bg-transparent text-black transition hover:bg-black/5 active:scale-95">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-      </svg>
-    </button>
-    <h1 class="font-heading text-lg font-semibold tracking-tight text-black">Seva Sankalp Abhiyan</h1>
-  </header>
+  <!-- Header (Standardized across all pages) -->
+  <app-page-header title="Seva Sankalp Abhiyan" (back)="goBack()"></app-page-header>
 
   <!-- Hero Section -->
-  <section class="relative my-3 text-center">
-    <!-- Top thin accent line -->
-    <div class="mx-auto h-[1px] w-24 bg-[#E85D38]/30"></div>
-
-    <div class="relative mt-2 inline-block">
-      <!-- Sparkle top left -->
-      <span class="absolute -left-6 -top-3 text-xl text-[#E85D38]">✦</span>
-      <h2 class="font-heading text-4xl font-extrabold tracking-normal text-[#E85D38]">
-        Jan Seva
-      </h2>
+  <section class="hero-section">
+    <div class="title-wrapper">
+      <span class="star pink-star">✦</span>
+      <h2 class="hero-title">Jan Seva</h2>
     </div>
-    <div class="relative mt-0.5 flex items-center justify-center gap-2">
-      <span class="font-heading text-4xl font-extrabold text-black">Hi</span>
-      <span class="font-heading text-4xl font-extrabold text-[#E85D38]">Prabhu Seva</span>
-      <!-- Sparkle top right -->
-      <span class="text-xl text-black">✦</span>
+    <div class="subtitle-wrapper">
+      <span class="hi-text">Hi</span>
+      <span class="prabhu-text">Prabhu Seva</span>
+      <span class="star dark-star">✦</span>
     </div>
   </section>
 
-  <!-- Banner Card: Seva Mera Yogdan -->
-  <div class="relative mt-4 overflow-hidden rounded-[24px] border border-black/10 bg-white p-4 shadow-[0_6px_20px_rgba(0,0,0,0.06)]">
-    <!-- Top Right Blue Blob -->
-    <div class="absolute -right-3 -top-3 h-20 w-20 rounded-bl-[100px] bg-[#3B52BA]"></div>
-    <!-- Yellow bottom shape -->
-    <div class="absolute -bottom-2 right-16 h-10 w-10 rounded-lg bg-[#F5C744] rotate-12"></div>
-    <!-- Red bottom corner badge -->
-    <div class="absolute -bottom-4 -right-4 h-12 w-12 bg-[#E85D38] rotate-45"></div>
-
-    <div class="relative z-10 flex items-center justify-between gap-2">
-      <!-- Left Content -->
-      <div class="flex-1 pr-2">
-        <h3 class="flex items-center gap-1 font-heading text-xl font-bold tracking-tight text-black">
-          Seva Mera Yogdan <span class="text-xs text-[#E85D38]">✦</span>
-        </h3>
-
-        <ul class="mt-2 space-y-1 text-[11px] leading-tight text-[#333333]">
-          <li class="flex items-center gap-1.5">
-            <span class="inline-block h-3 w-3 shrink-0 rounded-full border-2 border-[#3B52BA]"></span>
-            <span><strong class="text-[#3B52BA]">Choose</strong> a Seva category</span>
-          </li>
-          <li class="flex items-center gap-1.5">
-            <span class="inline-block h-3 w-3 shrink-0 rounded-full border-2 border-[#3B52BA]"></span>
-            <span><strong class="text-[#3B52BA]">Upload your photo</strong> performing the Seva</span>
-          </li>
-          <li class="flex items-center gap-1.5">
-            <span class="inline-block h-3 w-3 shrink-0 rounded-full border-2 border-[#3B52BA]"></span>
-            <span>Join Bharat in <strong class="text-[#3B52BA]">wishing PM Modi!</strong></span>
-          </li>
-        </ul>
-
-        <button (click)="goToCreatePost('Seva Mera Yogdan')" class="mt-3 flex items-center gap-1.5 rounded-full bg-[#E85D38] px-3.5 py-1.5 text-xs font-bold text-white shadow-md transition hover:bg-[#d44e2b] active:scale-95">
-          <span>Start now</span>
-          <span class="flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] text-[#E85D38]">➔</span>
-        </button>
-      </div>
-
-      <!-- Right Image Frame (Modi Seva photo) -->
-      <div class="relative h-28 w-36 shrink-0 overflow-hidden rounded-2xl border-2 border-white bg-neutral-200 shadow-sm">
-        <img src="assets/images/templates/Template1.webp" alt="Seva Mera Yogdan" class="h-full w-full object-cover" />
-      </div>
-    </div>
+  <!-- Banner Card 1: Seva Mera Yogdan (Image Asset) -->
+  <div (click)="goToCreatePost('Seva Mera Yogdan')" class="banner-card">
+    <img src="assets/images/banner_seva_mera_yogdan.png" alt="Seva Mera Yogdan" class="banner-img" />
   </div>
 
-  <!-- Cards Grid (2 Columns) -->
-  <div class="mt-4 grid grid-cols-2 gap-3.5">
-
-    <!-- Card 1: AI Shubhkamna -->
-    <div class="relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-black/10 bg-white p-3.5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] min-h-[220px]">
-      <!-- Top Bar Colors -->
-      <div class="absolute bottom-0 left-0 right-0 h-1 flex">
-        <div class="w-1/3 bg-[#3B52BA]"></div>
-        <div class="w-1/3 bg-[#F5C744]"></div>
-        <div class="w-1/3 bg-[#E85D38]"></div>
-      </div>
-
-      <div>
-        <div class="flex items-center justify-between">
-          <!-- Robot Icon -->
-          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#3B52BA]/10 text-xl">🤖</div>
-          <span class="text-lg text-[#E85D38]">✴️</span>
-        </div>
-
-        <h4 class="mt-2 font-heading text-sm font-bold text-black">AI Shubhkamna</h4>
-        <p class="mt-1 text-[11px] leading-tight text-[#4A4A4A]">
-          Wish PM Modi, share a <strong class="text-[#3B52BA]">personalised birthday card!</strong>
-        </p>
-      </div>
-
-      <div class="relative my-2 h-20 w-full overflow-hidden rounded-xl bg-neutral-100">
-        <img src="assets/images/templates/Preview1.webp" alt="AI Shubhkamna" class="h-full w-full object-cover" />
-      </div>
-
-      <button (click)="goToCreatePost('AI Shubhkamna')" class="flex w-fit items-center gap-1 rounded-full bg-[#E85D38] px-3 py-1 text-[11px] font-bold text-white shadow transition hover:opacity-90 active:scale-95">
-        <span>Start now</span>
-        <span class="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white text-[9px] text-[#E85D38]">➔</span>
-      </button>
+  <!-- Cards Grid (2 Columns, Side-by-Side Tile Layouts) -->
+  <div class="cards-grid">
+    <!-- Tile 1: AI Shubhkamna (Image Asset) -->
+    <div (click)="goToCreatePost('AI Shubhkamna')" class="grid-tile">
+      <img src="assets/images/tile_ai_shubhkamna.png" alt="AI Shubhkamna" class="tile-img" />
     </div>
 
-    <!-- Card 2: Aashirwad Ka Diya -->
-    <div class="relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-black/10 bg-white p-3.5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] min-h-[220px]">
-      <!-- Blue top corner blob -->
-      <div class="absolute -left-4 -top-4 h-12 w-12 rounded-full bg-[#3B52BA]"></div>
-      <!-- Right vertical stripe -->
-      <div class="absolute right-0 top-0 bottom-0 w-1.5 bg-[#F5C744]"></div>
-
-      <div>
-        <div class="flex items-center justify-between">
-          <div class="h-2 w-8 rounded-full bg-[#E85D38]"></div>
-          <span class="text-xl">🪔</span>
-        </div>
-
-        <h4 class="mt-2 text-right font-heading text-sm font-bold text-black">Aashirwad Ka Diya</h4>
-        <p class="mt-1 text-right text-[10px] leading-tight text-[#4A4A4A]">
-          <strong class="text-[#3B52BA]">Light a diya and share your selfie</strong> as a heartfelt expression of blessings for <strong class="text-[#E85D38]">PM Modi's 25 years</strong> of dedicated service.
-        </p>
-      </div>
-
-      <div class="relative my-2 h-20 w-full overflow-hidden rounded-xl bg-neutral-100">
-        <img src="assets/images/templates/Preview2.webp" alt="Aashirwad Ka Diya" class="h-full w-full object-cover" />
-        <!-- Bottom right pink starburst -->
-        <span class="absolute bottom-1 right-1 text-base text-[#E85D38]">💥</span>
-      </div>
-
-      <button (click)="goToCreatePost('Aashirwad Ka Diya')" class="ml-auto flex w-fit items-center gap-1 rounded-full bg-[#3B52BA] px-3 py-1 text-[11px] font-bold text-white shadow transition hover:opacity-90 active:scale-95">
-        <span>Upload now</span>
-        <span class="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white text-[9px] text-[#3B52BA]">➔</span>
-      </button>
+    <!-- Tile 2: Aashirwad Ka Diya (Image Asset) -->
+    <div (click)="goToCreatePost('Aashirwad Ka Diya')" class="grid-tile">
+      <img src="assets/images/tile_aashirwad_ka_diya.png" alt="Aashirwad Ka Diya" class="tile-img" />
     </div>
 
-    <!-- Card 3: Seva Ke Rang, Rashtra Ke Sang -->
-    <div class="relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-black/10 bg-white p-3.5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] min-h-[220px]">
-      <!-- Right vertical stripe -->
-      <div class="absolute right-0 top-0 bottom-0 w-1.5 bg-[#3B52BA]"></div>
-
-      <div>
-        <div class="flex items-center justify-between">
-          <div class="flex h-7 w-7 items-center justify-center rounded-lg border border-neutral-300 bg-neutral-50 text-sm">🖼️</div>
-          <span class="text-xl text-[#E85D38]">✴️</span>
-        </div>
-
-        <h4 class="mt-2 font-heading text-xs font-bold leading-tight text-black">Seva Ke Rang, Rashtra Ke Sang</h4>
-        <p class="mt-1 text-[10px] leading-tight text-[#4A4A4A]">
-          Upload your <strong class="text-[#3B52BA]">rangoli photo</strong> and celebrate the spirit of <strong class="text-[#3B52BA]">Seva through colours.</strong>
-        </p>
-      </div>
-
-      <div class="relative my-2 h-20 w-full overflow-hidden rounded-xl bg-neutral-100">
-        <img src="assets/images/templates/Preview3.webp" alt="Rangoli Seva" class="h-full w-full object-cover" />
-      </div>
-
-      <button (click)="goToCreatePost('Seva Ke Rang, Rashtra Ke Sang')" class="flex w-fit items-center gap-1 rounded-full bg-[#E85D38] px-3 py-1 text-[11px] font-bold text-white shadow transition hover:opacity-90 active:scale-95">
-        <span>Upload now</span>
-        <span class="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white text-[9px] text-[#E85D38]">➔</span>
-      </button>
+    <!-- Tile 3: Seva Ke Rang, Rashtra Ke Sang (Image Asset) -->
+    <div (click)="goToCreatePost('Seva Ke Rang, Rashtra Ke Sang')" class="grid-tile">
+      <img src="assets/images/tile_seva_ke_rang.png" alt="Seva Ke Rang, Rashtra Ke Sang" class="tile-img" />
     </div>
 
-    <!-- Card 4: Seva Ki Kahani -->
-    <div class="relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-black/10 bg-white p-3.5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] min-h-[220px]">
-      <!-- Blue left corner blob -->
-      <div class="absolute -left-4 -top-4 h-12 w-12 rounded-full bg-[#3B52BA]"></div>
-      <!-- Right vertical stripe -->
-      <div class="absolute right-0 top-0 bottom-0 w-1.5 bg-[#F5C744]"></div>
-
-      <div>
-        <div class="flex items-center justify-between">
-          <div class="h-2 w-8 rounded-full bg-[#E85D38]"></div>
-          <span class="text-xl">💬</span>
-        </div>
-
-        <h4 class="mt-2 text-right font-heading text-sm font-bold text-black">Seva Ki Kahani</h4>
-        <p class="mt-1 text-right text-[10px] leading-tight text-[#4A4A4A]">
-          Upload a special <strong class="text-[#3B52BA]">video greeting PM Modi</strong> on his birthday!
-        </p>
-      </div>
-
-      <div class="relative my-2 h-20 w-full overflow-hidden rounded-xl bg-neutral-100">
-        <img src="assets/images/templates/Preview4.webp" alt="Seva Ki Kahani" class="h-full w-full object-cover" />
-        <!-- Bottom right pink starburst -->
-        <span class="absolute bottom-1 right-1 text-base text-[#E85D38]">💥</span>
-      </div>
-
-      <button (click)="goToCreatePost('Seva Ki Kahani')" class="ml-auto flex w-fit items-center gap-1 rounded-full bg-[#3B52BA] px-3 py-1 text-[11px] font-bold text-white shadow transition hover:opacity-90 active:scale-95">
-        <span>Upload now</span>
-        <span class="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white text-[9px] text-[#3B52BA]">➔</span>
-      </button>
+    <!-- Tile 4: Seva Ki Kahani (Image Asset) -->
+    <div (click)="goToCreatePost('Seva Ki Kahani')" class="grid-tile">
+      <img src="assets/images/tile_seva_ki_kahani.png" alt="Seva Ki Kahani" class="tile-img" />
     </div>
-
   </div>
 
   <!-- Bottom Link: Explore Media Wall -->
-  <div class="mt-6 flex justify-center pb-4">
-    <button (click)="goToWall()" class="group inline-flex items-center gap-1.5 text-sm font-semibold text-black transition hover:text-[#E85D38]">
+  <div class="bottom-link-container">
+    <button (click)="goToWall()" class="wall-link-btn">
       <span>Explore</span>
-      <span class="border-b-2 border-black font-bold group-hover:border-[#E85D38]">Media Wall</span>
-      <span class="text-xs">↗</span>
+      <span class="underlined-text">Media wall</span>
+      <span class="arrow-icon">↗</span>
     </button>
   </div>
+
 </div>

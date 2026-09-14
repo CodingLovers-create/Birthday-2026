@@ -1,0 +1,72 @@
+.sort-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background-color: rgba(64, 38, 26, 0.7);
+
+  .sort-popup-card {
+    width: 100%;
+    max-width: 512px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    background-color: #ffffff;
+    padding: 20px;
+
+    .sort-header {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .sort-title {
+        font-family: inherit;
+        font-size: 18px;
+        font-weight: 600;
+        color: #2b1810;
+      }
+
+      .close-btn {
+        background: transparent;
+        border: none;
+        font-size: 16px;
+        color: rgba(64, 38, 26, 0.4);
+        cursor: pointer;
+      }
+    }
+
+    .sort-option-btn {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      border: none;
+      border-bottom: 1px solid #f5f5f5;
+      background: transparent;
+      padding: 12px 0;
+      text-align: left;
+      font-size: 14px;
+      cursor: pointer;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .option-label {
+        color: #40261a;
+
+        &.active {
+          color: #d90429;
+          font-weight: 600;
+        }
+      }
+
+      .checkmark {
+        color: #d90429;
+        font-weight: bold;
+      }
+    }
+  }
+}

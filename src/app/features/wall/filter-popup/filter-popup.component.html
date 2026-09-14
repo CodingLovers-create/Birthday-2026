@@ -1,38 +1,36 @@
-<div class="fixed inset-0 z-40 flex items-end justify-center bg-ink/70" (click)="requestClose()">
-  <div class="w-full max-w-lg rounded-t-2xl bg-white p-5" (click)="$event.stopPropagation()">
-    <div class="mb-4 flex items-center justify-between">
-      <h3 class="font-nunito text-lg font-semibold text-heading">Filter</h3>
-      <button type="button" class="text-ink/40" (click)="requestClose()">✕</button>
+<div class="popup-modal-backdrop" (click)="requestClose()">
+  <div class="popup-sheet-container" (click)="$event.stopPropagation()">
+    <div class="sheet-title-row">
+      <h3 class="popup-title">Filter</h3>
+      <button type="button" class="close-icon-btn" (click)="requestClose()">✕</button>
     </div>
 
-    <p class="mb-2 text-xs font-medium uppercase tracking-wide text-brand">Category</p>
-    <div class="mb-6 flex flex-wrap gap-2">
+    <p class="section-label">Category</p>
+    <div class="tags-chips-grid">
       <button
         *ngFor="let tag of tags"
         type="button"
-        class="rounded-full border px-3 py-1.5 text-sm"
-        [ngClass]="
-          selectedTag === tag ? 'border-brand bg-brand/10 text-brand' : 'border-neutral-200 text-ink/70'
-        "
+        class="tag-chip-btn"
+        [class.selected]="selectedTag === tag"
         (click)="pickTag(tag)"
       >
         {{ tag }}
       </button>
     </div>
 
-    <div class="flex justify-between gap-3">
-      <div class="flex w-1/2 justify-center">
+    <div class="buttons-action-row">
+      <div class="btn-col">
         <button
           type="button"
-          class="w-4/5 rounded-full border border-brand py-3 text-sm font-medium text-brand disabled:opacity-50"
+          class="btn-reset"
           [disabled]="!selectedTag"
           (click)="clearTag()"
         >
           Reset
         </button>
       </div>
-      <div class="flex w-1/2 justify-center">
-        <button type="button" class="w-4/5 rounded-full bg-brand py-3 text-sm font-medium text-white" (click)="applyFilter()">
+      <div class="btn-col">
+        <button type="button" class="btn-apply" (click)="applyFilter()">
           Apply
         </button>
       </div>

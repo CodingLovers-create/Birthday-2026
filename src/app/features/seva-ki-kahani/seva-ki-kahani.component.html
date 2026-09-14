@@ -1,0 +1,109 @@
+<div class="seva-ki-kahani-container doodle-bg">
+
+  <!-- Top Header -->
+  <app-page-header title="Seva Ki Kahani" (back)="goBack()"></app-page-header>
+
+  <!-- Hero Header Section -->
+  <section class="hero-section">
+    <!-- Red Badge -->
+    <div class="badge">
+      • Create & Share •
+    </div>
+
+    <!-- Main Title -->
+    <h2 class="main-title">
+      <span class="highlight">One reel. One wish.</span><br />
+      Straight from you to PM Modi!
+    </h2>
+
+    <!-- Divider Line -->
+    <div class="divider-line"></div>
+  </section>
+
+  <!-- Flow Steps Section (3 Steps with Dashed Arrows) -->
+  <div class="flow-steps-container">
+
+    <!-- Dashed Connecting Arrows (Background SVGs) -->
+    <svg class="connecting-arrows-svg" viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Arrow 1: From Step 1 top-left curving down to Step 2 top-left -->
+      <path d="M 135 45 C 80 65 80 120 135 140" stroke="#3B52BA" stroke-width="2" stroke-dasharray="4 4" fill="none" />
+      <polygon points="138,140 130,135 132,143" fill="#3B52BA" />
+
+      <!-- Arrow 2: From Step 2 top-right curving down to Step 3 top-right -->
+      <path d="M 185 145 C 240 165 240 220 188 238" stroke="#3B52BA" stroke-width="2" stroke-dasharray="4 4" fill="none" />
+      <polygon points="185,238 193,234 192,242" fill="#3B52BA" />
+    </svg>
+
+    <!-- Step 1: Record -->
+    <div class="step-item">
+      <!-- Icon Container -->
+      <div class="step-icon-wrapper">
+        <!-- Corner Camera Brackets -->
+        <div class="bracket top-left"></div>
+        <div class="bracket top-right"></div>
+        <div class="bracket bottom-left"></div>
+        <div class="bracket bottom-right"></div>
+
+        <!-- Avatar graphic -->
+        <div class="avatar-graphic">
+          <div class="head"></div>
+          <div class="body"></div>
+        </div>
+      </div>
+
+      <h3 class="step-title">Record</h3>
+      <p class="step-description">Make your birthday reel for PM Modi</p>
+    </div>
+
+    <!-- Step 2: Upload -->
+    <div class="step-item">
+      <div class="step-icon-wrapper orange-bg">
+        <svg class="upload-icon" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+        </svg>
+      </div>
+
+      <h3 class="step-title">Upload</h3>
+      <p class="step-description">Share your reel in just a few taps</p>
+    </div>
+
+    <!-- Step 3: Join -->
+    <div class="step-item">
+      <div class="step-icon-wrapper blue-circle">
+        <svg class="join-icon" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </div>
+
+      <h3 class="step-title">Join</h3>
+      <p class="step-description narrow">
+        Join Bharat in wishing PM Modi, see your reel on the Media Wall!
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Bottom Action Buttons (Upload & Capture) -->
+  <div class="action-buttons-container">
+    <!-- Upload Button -->
+    <button (click)="onUploadClick()" class="btn-upload">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="btn-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+      </svg>
+      <span>Upload</span>
+    </button>
+
+    <!-- Capture Button -->
+    <button (click)="onCaptureClick()" class="btn-capture">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="btn-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+      </svg>
+      <span>Capture</span>
+    </button>
+  </div>
+
+  <!-- Hidden File Input -->
+  <input #fileInput type="file" accept="image/*,video/*" class="hidden-input" (change)="onFileSelected($event)" />
+
+</div>

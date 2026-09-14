@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, switchMap } from 'rxjs';
 import { Template } from '../types/Template';
 import { ConfigService } from './config.service';
 import { Config } from '../types/Config';
@@ -236,32 +236,29 @@ export class DataService {
       });
   }
 
-  imageUrlToBase64(imageUrl: string): Promise<string> {
-    return this.http
-      .get(imageUrl, { responseType: 'blob' })
-      .toPromise()
-      .then((blob: Blob | undefined) => {
-        return this.blobToBase64(blob);
-      })
-      .catch((error) => {
+  imageUrlToBase64(imageUrl: string): Observable<string> {
+    return this.http.get(imageUrl, { responseType: 'blob' }).pipe(
+      switchMap((blob: Blob | undefined) => this.blobToBase64(blob)),
+      catchError((error) => {
         console.error('Error fetching or converting the image:', error);
-        return '';
-      });
+        return of('');
+      })
+    );
   }
 
-  private async blobToBase64(blob: Blob | undefined): Promise<string> {
+  private blobToBase64(blob: Blob | undefined): Observable<string> {
     if (!blob) {
-      return 'Invalid blob';
+      return of('Invalid blob');
     }
-    const buffer = await blob.arrayBuffer();
-    const base64String = btoa(
-      new Uint8Array(buffer).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        ''
-      )
-    );
-    // console.log(base64String);
-    return `data:${blob.type};base64,${base64String}`;
+    return new Observable((observer) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        observer.next((reader.result as string) || '');
+        observer.complete();
+      };
+      reader.onerror = (err) => observer.error(err);
+      reader.readAsDataURL(blob);
+    });
   }
   cameraClicked: boolean = false;
 

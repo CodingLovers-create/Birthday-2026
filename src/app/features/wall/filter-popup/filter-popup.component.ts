@@ -8,7 +8,8 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
   selector: 'app-filter-popup',
   standalone: true,
   imports: [CommonModule, ConfirmDialogComponent],
-  templateUrl: './filter-popup.component.html'
+  templateUrl: './filter-popup.component.html',
+  styleUrls: ['./filter-popup.component.scss']
 })
 export class FilterPopupComponent implements OnInit {
   readonly filter = input.required<FilterState>();

@@ -16,7 +16,8 @@ const DESCRIPTION_PREVIEW_LENGTH = 80;
   selector: 'app-post-card',
   standalone: true,
   imports: [CommonModule, PinchZoomDirective, CapitalizeFirstPipe, NameFormatterPipe, NumberRoundoffPipe, StringTrimmerPipe],
-  templateUrl: './post-card.component.html'
+  templateUrl: './post-card.component.html',
+  styleUrls: ['./post-card.component.scss']
 })
 export class PostCardComponent {
   readonly post = input.required<Post>();

@@ -13,7 +13,8 @@ import { NumberRoundoffPipe } from '../../pipes/number-roundoff.pipe';
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, PageHeaderComponent, CapitalizeFirstPipe, NameFormatterPipe, NumberRoundoffPipe],
-  templateUrl: './profile.component.html'
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
   readonly posts = signal<Post[]>([]);

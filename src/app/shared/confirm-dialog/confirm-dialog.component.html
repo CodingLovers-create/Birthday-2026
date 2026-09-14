@@ -1,25 +1,25 @@
-<div class="fixed inset-0 z-50 bg-ink/60" (click)="cancel.emit()">
+<div class="dialog-backdrop" (click)="cancel.emit()">
   <div
-    class="absolute bottom-0 left-0 flex w-full flex-col justify-evenly gap-4 rounded-t-3xl bg-white py-6"
+    class="dialog-card"
     (click)="$event.stopPropagation()"
   >
-    <p class="px-6 text-center text-base font-medium text-ink">{{ title() }}</p>
-    <p class="px-6 text-center text-sm text-ink/60" *ngIf="message()">{{ message() }}</p>
+    <p class="dialog-title">{{ title() }}</p>
+    <p class="dialog-message" *ngIf="message()">{{ message() }}</p>
 
-    <div class="flex w-full">
-      <div class="flex w-1/2 justify-center">
+    <div class="dialog-actions">
+      <div class="action-col">
         <button
           type="button"
-          class="w-4/5 rounded-full bg-brand py-3 text-sm font-medium text-white"
+          class="btn-confirm"
           (click)="confirm.emit()"
         >
           {{ confirmLabel() }}
         </button>
       </div>
-      <div class="flex w-1/2 justify-center">
+      <div class="action-col">
         <button
           type="button"
-          class="w-4/5 rounded-full border border-brand py-3 text-sm font-medium text-brand"
+          class="btn-cancel"
           (click)="cancel.emit()"
         >
           {{ cancelLabel() }}

@@ -60,8 +60,11 @@ export class PinchZoomDirective {
   }
 
   private distanceBetweenPointers(): number {
-    const [a, b] = [...this.activePointers.values()];
-    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const pointers = Array.from(this.activePointers.values());
+    if (pointers.length < 2 || !pointers[0] || !pointers[1]) {
+      return 0;
+    }
+    return Math.hypot(pointers[0].clientX - pointers[1].clientX, pointers[0].clientY - pointers[1].clientY);
   }
 
   private reset(): void {

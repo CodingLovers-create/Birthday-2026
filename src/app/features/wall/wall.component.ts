@@ -11,6 +11,7 @@ import { SortPopupComponent } from './sort-popup/sort-popup.component';
 import { CommentSectionComponent } from './comment-section/comment-section.component';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
+
 const DEFAULT_PROFILE_PIC = 'https://i.pravatar.cc/100?img=12';
 
 @Component({
@@ -24,7 +25,8 @@ const DEFAULT_PROFILE_PIC = 'https://i.pravatar.cc/100?img=12';
     CommentSectionComponent,
     ConfirmDialogComponent
   ],
-  templateUrl: './wall.component.html'
+  templateUrl: './wall.component.html',
+  styleUrls: ['./wall.component.scss']
 })
 export class WallComponent implements OnInit {
   readonly posts = signal<Post[]>([]);

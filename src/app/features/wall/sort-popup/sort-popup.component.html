@@ -1,20 +1,20 @@
-<div class="fixed inset-0 z-40 flex items-end justify-center bg-ink/70" (click)="close.emit()">
-  <div class="w-full max-w-lg rounded-t-2xl bg-white p-5" (click)="$event.stopPropagation()">
-    <div class="mb-4 flex items-center justify-between">
-      <h3 class="font-nunito text-lg font-semibold text-heading">Sort By</h3>
-      <button type="button" class="text-ink/40" (click)="close.emit()">✕</button>
+<div class="sort-popup-overlay" (click)="close.emit()">
+  <div class="sort-popup-card" (click)="$event.stopPropagation()">
+    <div class="sort-header">
+      <h3 class="sort-title">Sort By</h3>
+      <button type="button" class="close-btn" (click)="close.emit()">✕</button>
     </div>
 
     <button
       *ngFor="let option of options"
       type="button"
-      class="flex w-full items-center justify-between border-b border-neutral-100 py-3 text-left text-sm last:border-none"
+      class="sort-option-btn"
       (click)="chooseOption(option.value)"
     >
-      <span [class.text-brand]="selected() === option.value" [class.text-ink]="selected() !== option.value">
+      <span class="option-label" [class.active]="selected() === option.value">
         {{ option.label }}
       </span>
-      <span *ngIf="selected() === option.value" class="text-brand">✓</span>
+      <span *ngIf="selected() === option.value" class="checkmark">✓</span>
     </button>
   </div>
 </div>

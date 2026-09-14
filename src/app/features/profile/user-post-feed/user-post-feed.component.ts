@@ -13,7 +13,8 @@ import { PageHeaderComponent } from '../../../shared/page-header/page-header.com
   selector: 'app-user-post-feed',
   standalone: true,
   imports: [CommonModule, PostCardComponent, CommentSectionComponent, ConfirmDialogComponent, PageHeaderComponent],
-  templateUrl: './user-post-feed.component.html'
+  templateUrl: './user-post-feed.component.html',
+  styleUrls: ['./user-post-feed.component.scss']
 })
 export class UserPostFeedComponent implements OnInit {
   readonly posts = signal<Post[]>([]);

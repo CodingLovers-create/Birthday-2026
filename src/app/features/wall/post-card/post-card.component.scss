@@ -1,0 +1,217 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.post-card-article {
+  margin-bottom: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  .card-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .avatar-img {
+        height: 36px;
+        width: 36px;
+        border-radius: 9999px;
+        object-fit: cover;
+      }
+
+      .meta-wrapper {
+        .user-name {
+          font-family: 'Poppins', sans-serif;
+          font-size: 14px;
+          font-weight: 700;
+          color: #191919;
+          margin: 0;
+        }
+
+        .time-tag-info {
+          font-size: 12px;
+          color: rgba(25, 25, 25, 0.6);
+          margin: 2px 0 0 0;
+        }
+      }
+    }
+
+    .menu-dropdown-wrapper {
+      position: relative;
+
+      .menu-trigger-btn {
+        padding: 4px 8px;
+        font-size: 18px;
+        line-height: 1;
+        color: rgba(25, 25, 25, 0.4);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        right: 0;
+        top: 32px;
+        z-index: 10;
+        width: 128px;
+        border-radius: 12px;
+        background-color: #ffffff;
+        padding: 4px 0;
+        font-size: 14px;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        border: 1px solid rgba(0,0,0,0.05);
+
+        .dropdown-action-btn {
+          width: 100%;
+          padding: 8px 16px;
+          text-align: left;
+          font-weight: 500;
+          color: #E96A3B;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #FAF0E8;
+          }
+        }
+      }
+    }
+  }
+
+  .image-carousel-wrapper {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    overflow: hidden;
+    background-color: #40261A;
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.3s ease-in-out;
+
+      .post-image {
+        height: 100%;
+        width: 100%;
+        flex-shrink: 0;
+        cursor: zoom-in;
+        object-fit: contain;
+      }
+    }
+
+    .carousel-dots-container {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+
+      .dot-indicator {
+        height: 8px;
+        width: 8px;
+        border-radius: 9999px;
+        background-color: rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+
+        &.active-dot {
+          width: 16px;
+          background-color: #E14E45;
+        }
+      }
+    }
+  }
+
+  .card-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px 0 16px;
+
+    .action-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .action-icon-btn {
+        font-size: 20px;
+        color: #191919;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+
+        &.liked {
+          color: #E14E45;
+        }
+      }
+
+      .action-count {
+        font-size: 14px;
+        font-style: italic;
+        color: #191919;
+      }
+    }
+  }
+
+  .post-description-text {
+    padding: 6px 16px 4px 16px;
+    font-size: 14px;
+    color: #191919;
+    margin: 0;
+
+    .read-more-btn {
+      cursor: pointer;
+      color: rgba(25, 25, 25, 0.4);
+      text-decoration: underline;
+    }
+  }
+
+  .time-ago-footer {
+    padding: 0 16px 12px 16px;
+    font-size: 12px;
+    color: rgba(25, 25, 25, 0.5);
+    margin: 0;
+  }
+}
+
+.zoom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: rgba(25, 25, 25, 0.9);
+
+  .zoomed-img {
+    max-height: 100%;
+    max-width: 100%;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .close-zoom-btn {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    font-size: 24px;
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,71 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(64, 38, 26, 0.6);
+
+  .dialog-card {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 16px;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    background-color: #ffffff;
+    padding: 24px 0;
+
+    .dialog-title {
+      padding: 0 24px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: #40261a;
+    }
+
+    .dialog-message {
+      padding: 0 24px;
+      text-align: center;
+      font-size: 14px;
+      color: rgba(64, 38, 26, 0.6);
+    }
+
+    .dialog-actions {
+      display: flex;
+      width: 100%;
+
+      .action-col {
+        display: flex;
+        width: 50%;
+        justify-content: center;
+
+        .btn-confirm {
+          width: 80%;
+          border: none;
+          border-radius: 9999px;
+          background-color: #d90429;
+          padding: 12px 0;
+          font-size: 14px;
+          font-weight: 500;
+          color: #ffffff;
+          cursor: pointer;
+        }
+
+        .btn-cancel {
+          width: 80%;
+          border: 1px solid #d90429;
+          border-radius: 9999px;
+          background-color: transparent;
+          padding: 12px 0;
+          font-size: 14px;
+          font-weight: 500;
+          color: #d90429;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

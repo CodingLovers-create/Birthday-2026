@@ -1,0 +1,19 @@
+.user-post-feed-container {
+  margin: 0 auto;
+  min-height: 100vh;
+  max-width: 512px;
+  background-color: #FAF0E8;
+  padding-bottom: 32px;
+  box-sizing: border-box;
+
+  .feed-main {
+    padding-top: 8px;
+
+    .loading-state-text {
+      padding: 64px 0;
+      text-align: center;
+      font-size: 14px;
+      color: rgba(25, 25, 25, 0.4);
+    }
+  }
+}

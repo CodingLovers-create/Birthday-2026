@@ -5,7 +5,8 @@ import { Component, input, output } from '@angular/core';
   selector: 'app-confirm-dialog',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './confirm-dialog.component.html'
+  templateUrl: './confirm-dialog.component.html',
+  styleUrl: './confirm-dialog.component.scss'
 })
 export class ConfirmDialogComponent {
   readonly title = input('Are you sure?');

@@ -5,6 +5,7 @@ import { ProfileComponent } from './features/profile/profile.component';
 import { UserPostFeedComponent } from './features/profile/user-post-feed/user-post-feed.component';
 import { CreatePostComponent } from './features/create-post/create-post.component';
 import { MainDashboardComponent } from './features/main-dashboard/main-dashboard.component';
+import { SevaKiKahaniComponent } from './features/seva-ki-kahani/seva-ki-kahani.component';
 
 export const routes: Routes = [
   {
@@ -17,7 +18,9 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'profile/posts/:postId', component: UserPostFeedComponent },
       { path: 'create-post', component: CreatePostComponent },
-      { path: 'createPost', component: CreatePostComponent }
+      { path: 'createPost', component: CreatePostComponent },
+      { path: 'seva-ki-kahani', component: SevaKiKahaniComponent }
     ]
   }
 ];
+

@@ -13,7 +13,8 @@ import { NameFormatterPipe } from '../../../pipes/name-formatter.pipe';
   selector: 'app-comment-section',
   standalone: true,
   imports: [CommonModule, FormsModule, CapitalizeFirstPipe, NameFormatterPipe],
-  templateUrl: './comment-section.component.html'
+  templateUrl: './comment-section.component.html',
+  styleUrls: ['./comment-section.component.scss']
 })
 export class CommentSectionComponent implements OnInit {
   readonly postId = input.required<number>();

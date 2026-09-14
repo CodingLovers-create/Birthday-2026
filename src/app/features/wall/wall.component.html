@@ -1,19 +1,19 @@
-<div class="mx-auto min-h-screen max-w-lg bg-surface pb-24">
+<div class="wall-main-container">
   <!-- Header -->
-  <header class="sticky top-0 z-30 flex h-14 items-center justify-center border-b border-brand-dark/30 bg-surface px-4">
-    <h1 class="font-heading text-base text-heading">Birthday Wall</h1>
+  <header class="wall-header">
+    <h1 class="wall-title">Birthday Wall</h1>
   </header>
 
-  <div *ngIf="isFilterApplied" class="flex items-center gap-2 px-4 pb-1 pt-3">
-    <span class="rounded-full bg-brand/10 px-3 py-1 text-xs font-medium text-brand">{{ filter().tag }}</span>
-    <button type="button" class="text-xs font-medium text-ink/40" (click)="resetFilter()">Clear</button>
+  <div *ngIf="isFilterApplied" class="filter-chip-bar">
+    <span class="filter-tag-chip">{{ filter().tag }}</span>
+    <button type="button" class="clear-filter-btn" (click)="resetFilter()">Clear</button>
   </div>
 
   <!-- Feed -->
-  <main class="px-0 pt-2">
-    <p *ngIf="isLoading()" class="py-16 text-center text-sm text-ink/40">Loading the wall…</p>
+  <main class="feed-container">
+    <p *ngIf="isLoading()" class="loading-state-text">Loading the wall…</p>
 
-    <p *ngIf="!isLoading() && posts().length === 0" class="py-16 text-center text-sm text-ink/40">
+    <p *ngIf="!isLoading() && posts().length === 0" class="empty-state-text">
       No posts match this filter yet.
     </p>
 
@@ -26,30 +26,28 @@
       (openComments)="activeCommentsPostId.set($event.postId)"
     ></app-post-card>
 
-    <p *ngIf="isFetchingMore()" class="py-6 text-center text-sm text-ink/40">Loading more…</p>
+    <p *ngIf="isFetchingMore()" class="fetching-more-text">Loading more…</p>
   </main>
 
   <!-- Bottom bar: Filter / Sort / Profile -->
-  <nav
-    class="fixed bottom-0 left-0 right-0 z-30 mx-auto flex max-w-lg items-stretch justify-around rounded-t-2xl bg-white py-2 shadow-[0_-6px_8px_0_rgba(0,0,0,0.1)]"
-  >
-    <button type="button" class="flex flex-1 flex-col items-center gap-1 py-1" (click)="toggleFilter()">
-      <span class="text-xl" [ngClass]="isFilterApplied ? 'text-brand' : 'text-ink/70'">⚙</span>
-      <span class="text-xs font-medium text-ink/70">Filter</span>
+  <nav class="bottom-nav-bar">
+    <button type="button" class="nav-btn" (click)="toggleFilter()">
+      <span class="nav-icon" [ngClass]="{ 'active-brand': isFilterApplied }">⚙</span>
+      <span class="nav-label">Filter</span>
     </button>
 
-    <div class="w-px bg-black/10"></div>
+    <div class="divider"></div>
 
-    <button type="button" class="flex flex-1 flex-col items-center gap-1 py-1" (click)="toggleSort()">
-      <span class="text-xl" [ngClass]="isSortApplied ? 'text-brand' : 'text-ink/70'">↕</span>
-      <span class="text-xs font-medium text-ink/70">Sort</span>
+    <button type="button" class="nav-btn" (click)="toggleSort()">
+      <span class="nav-icon" [ngClass]="{ 'active-brand': isSortApplied }">↕</span>
+      <span class="nav-label">Sort</span>
     </button>
 
-    <div class="w-px bg-black/10"></div>
+    <div class="divider"></div>
 
-    <button type="button" class="flex flex-1 flex-col items-center gap-1 py-1" (click)="goToProfile()">
-      <img [src]="profilePic" alt="Profile" class="h-6 w-6 rounded-full border-2 border-brand object-cover" />
-      <span class="text-xs font-medium text-ink/70">Profile</span>
+    <button type="button" class="nav-btn" (click)="goToProfile()">
+      <img [src]="profilePic" alt="Profile" class="profile-avatar-img" />
+      <span class="nav-label">Profile</span>
     </button>
   </nav>
 </div>

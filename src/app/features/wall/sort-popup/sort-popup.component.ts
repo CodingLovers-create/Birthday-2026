@@ -6,7 +6,8 @@ import { SortOption } from '../../../models/filter.model';
   selector: 'app-sort-popup',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './sort-popup.component.html'
+  templateUrl: './sort-popup.component.html',
+  styleUrl: './sort-popup.component.scss'
 })
 export class SortPopupComponent {
   readonly selected = input.required<SortOption>();
