@@ -1,4 +1,4 @@
-@import "../../../assets/styles/helpers/mixins.scss";
+@use "../../../assets/styles/helpers/mixins.scss" as *;
 
 
 $accent: #D96B38;
@@ -20,8 +20,13 @@ $danger: #DD0000;
 
 .create-post-maincontainer {
     width: 100%;
-    min-height: 100%;
+    max-width: 512px;
+    margin: 0 auto;
+    min-height: 100vh;
+    height: auto;
     flex: 1 1 auto;
+    box-sizing: border-box;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
     @include flex-container(center, flex-start, column);
     @include bg-image("bg/bg_pattern.png");
     background-color: $bg;
@@ -150,7 +155,8 @@ $danger: #DD0000;
                     }
 
                     .caption-container {
-                        height: 17.5vh;
+                        min-height: 120px;
+                        height: auto;
                         width: 100%;
                         @include flex-container(flex-start, space-between, column);
                         position: relative;
@@ -303,8 +309,14 @@ $danger: #DD0000;
     border-radius: 24px 24px 0px 0px;
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     width: 100%;
-    height: 25%;
+    max-width: 512px;
+    max-height: 85vh;
+    height: auto;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
     z-index: 40;
     display: flex;
     flex-direction: column;
@@ -365,9 +377,14 @@ $danger: #DD0000;
     border-radius: 24px 24px 0px 0px;
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     width: 100%;
-    // height: 32.09%;
-    height: 34.6%;
+    max-width: 512px;
+    max-height: 85vh;
+    height: auto;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
     z-index: 20;
     @include flex-container(center, center, column);
 
@@ -464,8 +481,14 @@ $danger: #DD0000;
     border-radius: 24px 24px 0px 0px;
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     width: 100%;
-    height: 34.6%;
+    max-width: 512px;
+    max-height: 85vh;
+    height: auto;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
     z-index: 20;
     @include flex-container(center, space-around, column);
 
@@ -618,9 +641,13 @@ $danger: #DD0000;
     border-radius: 24px 24px 0px 0px;
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     width: 100%;
-    /* raised from 58.47% so all five messages fit without a cramped scroll */
-    max-height: 68%;
+    max-width: 512px;
+    max-height: 85vh;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
     overflow: hidden;
     z-index: 40;
     @include flex-container(center, flex-start, column);
@@ -745,8 +772,14 @@ $danger: #DD0000;
     border-radius: 24px 24px 0px 0px;
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     width: 100%;
-    height: 24.6%;
+    max-width: 512px;
+    max-height: 85vh;
+    height: auto;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
     z-index: 60;
     @include flex-container(center, flex-start, column);
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import constants from '../constants/constants';
 import { GetTokenDetailsResponse } from '../types/TokenType';
@@ -6,6 +6,7 @@ import { TokenService } from './token.service';
 import { SdkService } from './sdk.service';
 import { Router } from '@angular/router';
 import { DataService } from './data.service';
+import { WINDOW } from '../config/window.token';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class NmInitialService {
     private tokenService: TokenService,
     private engagesdkCallbackService: SdkService,
     private route: Router,
-    private dataService: DataService
+    private dataService: DataService,
+    @Inject(WINDOW) private readonly win: Window
   ) { }
 
   token: string | null = '';
@@ -28,7 +30,7 @@ export class NmInitialService {
   getTokenData() {
     const apiUrl = constants.getTokenDetails;
     let headers = new HttpHeaders()
-    const url = window.location.href;
+    const url = this.win.location?.href || '';
     this.getUserNameFromUrl(url);
     // this.getDataFromUrl();
     this.token = this.tokenService.getJwtFromUrl(url);
@@ -88,7 +90,7 @@ export class NmInitialService {
 
   handleMissingConstituency() {
     const url = this.tokenService.getUrlWithoutToken();
-    if ((window as any).android && (window as any).android.__externalCall) {
+    if ((this.win as any).android && (this.win as any).android.__externalCall) {
       this.engagesdkCallbackService.informationNeeded('constituency', url);
     }
     else {
@@ -170,7 +172,7 @@ export class NmInitialService {
   // }
 
   getUserNameFromUrl(url: string) {
-    const currentUrl = window.location.href;
+    const currentUrl = url || this.win.location?.href || '';
     const urlSearchParams = new URLSearchParams(currentUrl.split('?')[1]);
     let username = urlSearchParams.get('userName');
     if (username) {
@@ -187,7 +189,7 @@ export class NmInitialService {
   }
 
   getDataFromUrl() {
-    const currentUrl = window.location.href;
+    const currentUrl = this.win.location?.href || '';
     const urlSearchParams = new URLSearchParams(currentUrl.split('?')[1]);
     let source = urlSearchParams.get('source');
     let id = urlSearchParams.get('id');

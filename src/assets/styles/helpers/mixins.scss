@@ -1,4 +1,5 @@
-@import "./fonts.scss";
+@use "sass:math";
+@use "./fonts.scss" as *;
 
 $basePath: "/assets/images/";
 $primary-font-family: "P-400";
@@ -24,8 +25,8 @@ $primary-font-size-value: 14;
 
 @mixin font($minimum, $preffered, $maximum, $color: #000, $family: P-400) {
 
-    $minimum: $minimum/$primary-font-size-value + rem;
-    $maximum: $maximum/$primary-font-size-value + rem;
+    $minimum-calc: math.div($minimum, $primary-font-size-value) * 1rem;
+    $maximum-calc: math.div($maximum, $primary-font-size-value) * 1rem;
 
     @if ($family==P-400) {
         font-family: "P-400";
@@ -98,7 +99,7 @@ $primary-font-size-value: 14;
     }
 
     color: $color;
-    font-size: clamp(#{$minimum}, #{$preffered}, #{$maximum});
+    font-size: clamp(#{$minimum-calc}, #{$preffered}, #{$maximum-calc});
 }
 
 @mixin bg-image($path, $size: cover) {

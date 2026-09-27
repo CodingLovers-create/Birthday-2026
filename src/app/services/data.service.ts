@@ -1,21 +1,30 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, Observable, catchError, of, switchMap } from 'rxjs';
 import { Template } from '../types/Template';
 import { ConfigService } from './config.service';
 import { Config } from '../types/Config';
 import constants from '../constants/constants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import { FilterData } from '../types/RequestResponseTypes';
 import { FilterData, FeedsListResponse, ApiResponse, UpdateSelfieStatusRequest } from '../types/RequestResponseTypes';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { LanguageCode } from '../types/LanguageTypes';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  private destroyRef = inject(DestroyRef);
+
+  /** Modern Angular Signals for Reactive State */
+  readonly usernameSignal = signal<string>('');
+  readonly stateSignal = signal<string>('');
+  readonly constiSignal = signal<string>('');
+  readonly currentTemplateSignal = signal<Template | null>(null);
+  readonly postCaptionSignal = signal<string>('');
+  readonly apiResponseImageSignal = signal<string>('');
+
   showHelper = new BehaviorSubject<boolean>(false);
   blockSwipeGestures = new BehaviorSubject<boolean>(true);
 
@@ -26,101 +35,65 @@ export class DataService {
   backgroundBase64 = new BehaviorSubject<string>('');
   circleBase64 = new BehaviorSubject<string>('');
 
-
   userId = "";
   isTemplatePageVisited: boolean = false;
-  // templates!:Template[];
-  // capturedImage:string = '';
   currentTemplate!: Template;
 
   currentSloganId = new BehaviorSubject<number>(1);
-
   currentlang = new BehaviorSubject<LanguageCode>('eng');
-
   currentisUserForeground = new BehaviorSubject<0|1>(0);
   currentcelebrityIDs = new BehaviorSubject<string>('1');
 
-
   currentTemplateBase64 = new BehaviorSubject<string>('');
-
   isWallPageVisited: boolean = false;
-  // isCameraButtonClicked = new BehaviorSubject<boolean>(false);
   isCameraButtonClicked: boolean = false;
 
   isLoaderActive = new BehaviorSubject<boolean>(false);
-
   isSetIntervalRequired = new BehaviorSubject<boolean>(false);
-
   isPreviewIntervalRequired = new BehaviorSubject<boolean>(false);
-
   isPreviewCalled = new BehaviorSubject<boolean>(false);
 
   reportedPostId = new BehaviorSubject<number | null>(null);
-
   reportAction = new BehaviorSubject<"report" | "delete">('report');
-
   showReportedToast = new BehaviorSubject<number>(0);
-
   selectedTemplete = new BehaviorSubject<number>(1);
-
-  currentRoute = new BehaviorSubject<'template' | 'createPost' | 'instructions' | 'certificate' | 'app'>('app')
+  currentRoute = new BehaviorSubject<'template' | 'createPost' | 'instructions' | 'certificate' | 'app'>('app');
 
   reload: boolean = false;
-
-  reloadCreatePostPage = new BehaviorSubject<boolean>(false)
-
-  routeTo = new BehaviorSubject<'preview' | 'createPost' | 'retake' | 'instructions' | ''>('')
-
+  reloadCreatePostPage = new BehaviorSubject<boolean>(false);
+  routeTo = new BehaviorSubject<'preview' | 'createPost' | 'retake' | 'instructions' | ''>('');
   isSelectAllowed = new BehaviorSubject<boolean>(true);
-
   wallwhiteloader: boolean = false;
 
   apiResponseImage = new BehaviorSubject<string>(''); //python API
-
   apiResponseError = new BehaviorSubject<string>(''); //python API - Producer Error Message
-
-  apiResponseErrorID = new BehaviorSubject<number | null>(null);  //python API  - Producer Error ID
-
-  isPerfectImageShowError = new BehaviorSubject<boolean>(false); //python API  - Consumer code -> 0 : image is not perfect (show popup - T) | 1 : image is perfect (no popup - F) | -1: data unavailable (no popup - F)
-
+  apiResponseErrorID = new BehaviorSubject<number | null>(null);  //python API - Producer Error ID
+  isPerfectImageShowError = new BehaviorSubject<boolean>(false);
   apiResponseWait = new BehaviorSubject<0 | 1 | 2 | 3>(0); //0 = cancel | 1 = wait | 2 = upload | 3 = complete
-
   apiResponsePopup = new BehaviorSubject<boolean>(false); // to activate show popup
-
   isCancelClicked = new BehaviorSubject<boolean>(false); // cancel of loader popup
-
   callPythonApi = new BehaviorSubject<boolean>(false); // for calling the python api from preview
-
   clickedButton = new BehaviorSubject<string>('');
-
   postCaption = new BehaviorSubject<string>('');
-
   isInfiniteLoader = new BehaviorSubject<boolean>(false);
-
   currentRefID = new BehaviorSubject<string>('');
-
   killInfiniteTimeOut = new BehaviorSubject<boolean>(false);
-
   isEntryLoaderActive = new BehaviorSubject<boolean>(false);
 
   //ALERT
   entryfromInfinite = new BehaviorSubject<boolean>(false); 
-
   isNameEditPopupOpen = new BehaviorSubject<boolean>(false);
-
   isSloganPopupOpen = new BehaviorSubject<boolean>(false);
-
   isFileErrorOpen = new BehaviorSubject<boolean>(false);
-
   nameBeforeChange  = new BehaviorSubject<string>('');
   
   //time spent 
-  totalTimeSpent = new BehaviorSubject<number>(0); // Store homepage [template] entry time in the module
-  templateEntryTime = new BehaviorSubject<number>(0); // template pageload
-  createPostEntryTime = new BehaviorSubject<number>(0); // createPost pageload
-  instructionsEntryTime = new BehaviorSubject<number>(0); // instructions pageload
-  uploadStartEntryTime = new BehaviorSubject<number>(0); // uploadStart 
-  nameEditEntryTime = new BehaviorSubject<number>(0); // nameEditEntryTime 
+  totalTimeSpent = new BehaviorSubject<number>(0);
+  templateEntryTime = new BehaviorSubject<number>(0);
+  createPostEntryTime = new BehaviorSubject<number>(0);
+  instructionsEntryTime = new BehaviorSubject<number>(0);
+  uploadStartEntryTime = new BehaviorSubject<number>(0);
+  nameEditEntryTime = new BehaviorSubject<number>(0);
   
   headers = new HttpHeaders();
 
@@ -131,7 +104,7 @@ export class DataService {
     userFlag: 'N'
   });
 
-  sortState = new BehaviorSubject<0 | 1>(0)
+  sortState = new BehaviorSubject<0 | 1>(0);
 
   username: string = '';
   state: string = '';
@@ -144,18 +117,18 @@ export class DataService {
   homeActivityId: string = '';
   homeQuestId: string = '';
 
-  certificate:string = '';
-  tranId:string = '';
+  certificate: string = '';
+  tranId: string = '';
 
   currentAttempt: number = 0;
   maxAttempt: number = 0;
 
   //attempt
-  attemptGUD:any = 0;
-  maxAttemptGUD:any = 1;
+  attemptGUD: any = 0;
+  maxAttemptGUD: any = 1;
   //share
-  thankYouShare:any = 0;
-  maxThankYouShare:any = 1;
+  thankYouShare: any = 0;
+  maxThankYouShare: any = 1;
 
   constructor(
     private configService: ConfigService,
@@ -163,46 +136,35 @@ export class DataService {
     private tokenService: TokenService,
     private route: Router
   ) {
-    this.configService.CurrentConfig.subscribe((data: Config) => {
-      this.currentTemplate = data.templatePage.templates[0];
-
-      // this.imageUrlToBase64(this.currentTemplate.src).then((base64String) => {
-      //   this.currentTemplateBase64.next(base64String);
-      // })
-
-    })
+    this.configService.CurrentConfig
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data: Config) => {
+        if (data?.templatePage?.templates?.length) {
+          this.currentTemplate = data.templatePage.templates[0];
+          this.currentTemplateSignal.set(this.currentTemplate);
+        }
+      });
   }
 
-  // updateCameraPopupState(type: 'cancel' | 'wait') {
-  //   if (type == 'cancel') {
-  //     this.apiResponseWait.next(0);
-  //   } else if (type == 'wait') {
-  //     this.apiResponseWait.next(1);
-  //   }
-  // }
   updateCameraPopupState(type: 'cancel' | 'wait' | 'upload' | 'complete') {
     if (type == 'cancel') {
       this.apiResponseWait.next(0);
     } else if (type == 'wait') {
       this.apiResponseWait.next(1);
-    }
-    else if (type == 'upload') {
+    } else if (type == 'upload') {
       this.apiResponseWait.next(2);
-    }
-    else if (type == 'complete') {
+    } else if (type == 'complete') {
       this.apiResponseWait.next(3);
     }
   }
 
-  updateRefIDState(refId:string, statusId: 0 | 1 | 2) {
-    // 0: Pending | 1: Complete | 2:Abort
+  updateRefIDState(refId: string, statusId: 0 | 1 | 2) {
     let url = constants.UpdateSelfieStatus;
     const token = this.tokenService.getJwtToken();
     this.headers = this.headers.set("Authorization", "Bearer " + token);
     let template_id = this.selectedTemplete.value;
     let slogan_id: string = this.currentSloganId.value.toString();
     let langauge: LanguageCode = this.currentlang.value;
-
 
     let request: UpdateSelfieStatusRequest = {
       uuid: this.tokenService.getUserID(),
@@ -211,27 +173,23 @@ export class DataService {
       templateId: template_id.toString(),
       slogId: slogan_id,
       lang: langauge
-    }
+    };
 
-    // window.alert(JSON.stringify(request));
-
-    this.http.post<ApiResponse<null>>(url, request, { headers: this.headers, responseType: 'json' }).
-      subscribe({
+    this.http.post<ApiResponse<null>>(url, request, { headers: this.headers, responseType: 'json' })
+      .subscribe({
         next: (response) => {
-          // console.log(response)
-          if(statusId == 1 || statusId == 2){
-            if(statusId == 2){
+          if (statusId == 1 || statusId == 2) {
+            if (statusId == 2) {
               this.isInfiniteLoader.next(false);
-              this.route.navigate(['/main', 'template'])
+              this.route.navigate(['/main', 'template']);
             }
             this.currentRefID.next('');
-          }
-          else{
+          } else {
             this.currentRefID.next(refId);
           }
         },
         error: (e) => {
-          console.log(e)
+          console.log(e);
         }
       });
   }
@@ -260,6 +218,7 @@ export class DataService {
       reader.readAsDataURL(blob);
     });
   }
+
   cameraClicked: boolean = false;
 
   setCameraClicked(arg: boolean) {
@@ -269,7 +228,6 @@ export class DataService {
   getCameraClicked() {
     return this.cameraClicked;
   }
-
 
   setTemplateVisited(val: boolean) {
     this.isTemplatePageVisited = val;
@@ -289,42 +247,29 @@ export class DataService {
 
   setUserId(userId: string) {
     this.userId = userId;
-    this.isUserIdSet.next("Y")
+    this.isUserIdSet.next("Y");
   }
 
   getUserId() {
     return this.userId;
   }
 
-  getCurrentTemplate() {
-    return this.currentTemplate
+  getCurrentTemplate(): Template {
+    return this.currentTemplate;
   }
 
   setCurrentTemplate(template: Template, langauge: LanguageCode, slogan_id: number, isUserForeground?: 0|1, celebrityIDs?: string) {
     this.currentTemplate = template;
+    this.currentTemplateSignal.set(template);
     this.currentlang.next(langauge);
     this.currentSloganId.next(slogan_id);
-    if(isUserForeground)
-    {
+    if (isUserForeground) {
       this.currentisUserForeground.next(isUserForeground);
     }
-    if(celebrityIDs)
-    {
+    if (celebrityIDs) {
       this.currentcelebrityIDs.next(celebrityIDs);
     }
-    // console.log(template,this.currentlang.value, this.currentSloganId.value)
   }
-
-  // setTemplateId(id:number)
-  // {
-  //   this.currentTemplate = id;
-  // }
-
-  // getTemplateSrc():string
-  // {
-  //   const id = this.currentTemplate;
-  //   return this.templates[id-1].src;
-  // }
 
   setImage(image: string) {
     this.image.next(image);
@@ -334,51 +279,56 @@ export class DataService {
     return this.image.asObservable();
   }
 
-  // getHashTag():string
-  // {
-  //   return this.templates[this.currentTemplate-1].hashtag;
-  // }
-
   reloadCreatePost() {
     if (this.reloadCreatePostPage) {
-      // window.location.reload();
       this.reloadCreatePostPage.next(false);
     }
   }
 
   setUsername(name: string) {
     this.username = name;
+    this.usernameSignal.set(name);
   }
 
   getUsername(): string {
-    return this.username
+    if (!this.username && typeof sessionStorage !== 'undefined') {
+      this.username = sessionStorage.getItem('username') || '';
+      this.usernameSignal.set(this.username);
+    }
+    return this.username;
   }
 
   setState(arg: string) {
     this.state = arg;
+    this.stateSignal.set(arg);
   }
 
-  getState() {
+  getState(): string {
+    if (!this.state && typeof sessionStorage !== 'undefined') {
+      this.state = sessionStorage.getItem('state') || '';
+      this.stateSignal.set(this.state);
+    }
     return this.state;
   }
 
   setConsti(arg: string) {
     this.consti = arg;
+    this.constiSignal.set(arg);
   }
 
-  getConsti() {
-    return this.consti
+  getConsti(): string {
+    if (!this.consti && typeof sessionStorage !== 'undefined') {
+      this.consti = sessionStorage.getItem('constituency') || '';
+      this.constiSignal.set(this.consti);
+    }
+    return this.consti;
   }
 
   posterLocationLimit: number = 40;
 
-  // "Constituency, State" as rendered on the poster. Used both for the template-page
-  // preview overlay and for the Location field sent to the image API, so the generated
-  // poster matches what the user saw. Empty parts are dropped (no stray ", State"),
-  // and ".." is appended only when the string exceeds the limit.
   getPosterLocation(): string {
-    const consti = this.getConsti() || sessionStorage.getItem('constituency') || '';
-    const state = this.getState() || sessionStorage.getItem('state') || '';
+    const consti = this.getConsti() || (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('constituency') || '' : '');
+    const state = this.getState() || (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('state') || '' : '');
     const location = [consti, state].map((v) => v.trim()).filter((v) => v.length > 0).join(', ');
 
     if (location.length > this.posterLocationLimit) {
@@ -387,3 +337,4 @@ export class DataService {
     return location;
   }
 }
+

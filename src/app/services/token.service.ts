@@ -1,60 +1,84 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import constants from '../constants/constants';
-import { BehaviorSubject } from 'rxjs';
+import { GetTokenDetailsResponse } from '../types/TokenType';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
+  private readonly tokenSubject = new BehaviorSubject<string>('');
+  private readonly userIdSubject = new BehaviorSubject<string>('');
 
-  constructor(private route: ActivatedRoute) { }
+  /** Public RxJS Observable streams */
+  readonly token$: Observable<string> = this.tokenSubject.asObservable();
+  readonly userId$: Observable<string> = this.userIdSubject.asObservable();
 
-  token = new BehaviorSubject<string>('')
-  userId = new BehaviorSubject<string>('')
-  url = '';
-  user = '';
-  urlWithoutToken = constants.externalCallback;
+  /** Modern Angular Signals */
+  readonly tokenSignal = signal<string>('');
+  readonly userIdSignal = signal<string>('');
+  readonly userSignal = signal<GetTokenDetailsResponse | null>(null);
 
-  getJwtFromUrl(url: string) {
-    const currentUrl = window.location.href;
-    const urlSearchParams = new URLSearchParams(currentUrl.split('?')[1]);
-    let jwtToken = urlSearchParams.get('jwt');
-    return jwtToken
+  /** Legacy / Public state properties maintained for backward compatibility */
+  token = this.tokenSubject;
+  userId = this.userIdSubject;
+  url: string = '';
+  user: GetTokenDetailsResponse | any = null;
+  urlWithoutToken: string = constants.externalCallback;
+
+  constructor(private readonly route: ActivatedRoute) {}
+
+  /** Extract JWT token safely from URL query parameters */
+  getJwtFromUrl(url?: string): string | null {
+    try {
+      const targetUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+      if (!targetUrl.includes('?')) {
+        return null;
+      }
+      const urlSearchParams = new URLSearchParams(targetUrl.split('?')[1]);
+      return urlSearchParams.get('jwt');
+    } catch (e) {
+      console.error('Error parsing JWT from URL:', e);
+      return null;
+    }
   }
 
-  getUrlWithToken() {
+  getUrlWithToken(): string {
     return this.url;
   }
 
-  setJwtToken(token: string) {
-    this.token.next(token)
+  setJwtToken(token: string): void {
+    const value = token || '';
+    this.tokenSubject.next(value);
+    this.tokenSignal.set(value);
   }
 
-  getJwtToken() {
-    return this.token.value;
+  getJwtToken(): string {
+    return this.tokenSubject.value;
   }
 
-  getUrlWithoutToken() {
+  getUrlWithoutToken(): string {
     return this.urlWithoutToken;
   }
 
-  setUserDetails(user: any) {
-    this.user = user
+  setUserDetails(user: GetTokenDetailsResponse | any): void {
+    this.user = user;
+    this.userSignal.set(user);
   }
 
-  getUserDetails() {
+  getUserDetails(): GetTokenDetailsResponse | any {
     return this.user;
   }
 
-  setUserID(userId: string) {
-    this.userId.next(userId)
+  setUserID(userId: string): void {
+    const value = userId || '';
+    this.userIdSubject.next(value);
+    this.userIdSignal.set(value);
   }
 
-  getUserID() {
-    return this.userId.value;
+  getUserID(): string {
+    return this.userIdSubject.value;
   }
-
-
-
 }
+

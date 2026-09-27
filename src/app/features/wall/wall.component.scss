@@ -1,9 +1,10 @@
 .wall-main-container {
   margin: 0 auto;
   min-height: 100vh;
+  width: 100%;
   max-width: 512px;
   background-color: #FAF0E8;
-  padding-bottom: 96px;
+  padding-bottom: calc(72px + max(16px, env(safe-area-inset-bottom, 0px)));
   box-sizing: border-box;
 
   .wall-header {
@@ -11,7 +12,7 @@
     top: 0;
     z-index: 30;
     display: flex;
-    height: 56px;
+    height: 52px;
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid rgba(233, 106, 59, 0.2);
@@ -79,12 +80,13 @@
     margin: 0 auto;
     display: flex;
     max-width: 512px;
+    width: 100%;
     align-items: stretch;
     justify-content: space-around;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
     background-color: #ffffff;
-    padding: 8px 0;
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom, 0px));
     box-shadow: 0 -6px 8px 0 rgba(0, 0, 0, 0.1);
 
     .nav-btn {

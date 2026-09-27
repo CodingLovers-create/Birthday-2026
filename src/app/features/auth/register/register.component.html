@@ -1,0 +1,99 @@
+<div class="register-main-container">
+  <app-page-header title="User Registration" [showBack]="false"></app-page-header>
+
+  <main class="register-card-wrapper">
+    <div class="header-badge-section">
+      <span class="badge">• Seva Sankalp Abhiyan •</span>
+      <h2 class="hero-title">
+        Join the <span class="highlight">Celebration</span>
+      </h2>
+      <p class="hero-subtext">Fill in your details below to generate your personalized wish card & reel!</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="reactive-form-box">
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username" class="form-label">Full Name <span class="req">*</span></label>
+        <div class="input-wrapper" [class.is-invalid]="submitted && f['username'].errors">
+          <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            placeholder="Enter your full name"
+            class="form-input"
+          />
+        </div>
+        <div *ngIf="submitted && f['username'].errors" class="error-feedback">
+          <span *ngIf="f['username'].errors['required']">Full Name is required.</span>
+          <span *ngIf="f['username'].errors['minlength']">Name must be at least 2 characters long.</span>
+        </div>
+      </div>
+
+      <!-- State Selection -->
+      <div class="form-group">
+        <label for="state" class="form-label">State <span class="req">*</span></label>
+        <div class="input-wrapper" [class.is-invalid]="submitted && f['state'].errors">
+          <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <select id="state" formControlName="state" class="form-input select-input">
+            <option *ngFor="let stateItem of statesList" [value]="stateItem">{{ stateItem }}</option>
+          </select>
+        </div>
+        <div *ngIf="submitted && f['state'].errors" class="error-feedback">
+          <span>State is required.</span>
+        </div>
+      </div>
+
+      <!-- Constituency Selection -->
+      <div class="form-group">
+        <label for="constituency" class="form-label">Constituency <span class="req">*</span></label>
+        <div class="input-wrapper" [class.is-invalid]="submitted && f['constituency'].errors">
+          <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+          <select id="constituency" formControlName="constituency" class="form-input select-input">
+            <option *ngFor="let constiItem of availableConstituencies" [value]="constiItem">{{ constiItem }}</option>
+          </select>
+        </div>
+        <div *ngIf="submitted && f['constituency'].errors" class="error-feedback">
+          <span>Constituency is required.</span>
+        </div>
+      </div>
+
+      <!-- Mobile Number Field -->
+      <div class="form-group">
+        <label for="mobile" class="form-label">Mobile Number <span class="req">*</span></label>
+        <div class="input-wrapper" [class.is-invalid]="submitted && f['mobile'].errors">
+          <span class="country-code">+91</span>
+          <input
+            id="mobile"
+            type="tel"
+            formControlName="mobile"
+            placeholder="Enter 10-digit mobile number"
+            maxlength="10"
+            class="form-input mobile-input"
+          />
+        </div>
+        <div *ngIf="submitted && f['mobile'].errors" class="error-feedback">
+          <span *ngIf="f['mobile'].errors['required']">Mobile number is required.</span>
+          <span *ngIf="f['mobile'].errors['pattern']">Please enter a valid 10-digit mobile number starting with 6-9.</span>
+        </div>
+      </div>
+
+      <!-- Submit Action Button -->
+      <div class="btn-container">
+        <button type="submit" class="btn-submit-mobile">
+          <span>Send OTP & Continue</span>
+          <svg class="arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

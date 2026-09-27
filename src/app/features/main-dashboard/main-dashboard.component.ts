@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -11,8 +12,8 @@ import { PageHeaderComponent } from '../../shared/page-header/page-header.compon
   styleUrls: ['./main-dashboard.component.scss']
 })
 export class MainDashboardComponent {
-
-  constructor(private router: Router) {}
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
   goToCreatePost(tag: string = 'Birthday Wishes'): void {
     if (tag === 'Seva Ki Kahani') {
@@ -28,5 +29,10 @@ export class MainDashboardComponent {
 
   goBack(): void {
     this.router.navigate(['/wall']);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/banner-library']);
   }
 }

@@ -58,6 +58,12 @@
     color: #000000;
     text-align: center;
     margin: 0;
+    padding: 0 48px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .right-content {
@@ -65,5 +71,24 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
+    z-index: 2;
+
+    ::ng-deep .btn-logout-header {
+      background-color: rgba(232, 82, 53, 0.1);
+      color: #E85235;
+      border: 1px solid rgba(232, 82, 53, 0.3);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.15s ease;
+
+      &:hover {
+        background-color: #E85235;
+        color: #ffffff;
+      }
+    }
   }
 }

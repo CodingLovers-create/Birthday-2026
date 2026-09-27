@@ -1,0 +1,64 @@
+<div class="otp-main-container">
+  <app-page-header title="OTP Verification" (back)="goBackToRegister()"></app-page-header>
+
+  <main class="otp-card-wrapper">
+    <div class="header-badge-section">
+      <div class="icon-circle">
+        <svg class="lock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
+      <h2 class="hero-title">Verify Phone Number</h2>
+      <p class="hero-subtext">
+        Enter 4-digit code sent to <span class="phone-highlight">{{ userMobile }}</span>
+      </p>
+    </div>
+
+    <div class="otp-form-box">
+      <!-- 4 Digit OTP Input Fields -->
+      <div class="otp-inputs-row">
+        <input
+          *ngFor="let digit of otpDigits; let i = index; trackBy: trackByIndex"
+          #otpInput
+          type="tel"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          autocomplete="one-time-code"
+          maxlength="1"
+          [value]="otpDigits[i]"
+          (input)="onDigitInput($event, i)"
+          (keydown)="onKeyDown($event, i)"
+          (paste)="onPaste($event)"
+          class="otp-digit-field"
+          [class.filled]="otpDigits[i] !== ''"
+          [class.has-error]="errorMessage !== ''"
+        />
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-msg-box">
+        <svg class="err-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Action Button -->
+      <button
+        type="button"
+        (click)="verifyOtp()"
+        [disabled]="isVerifying"
+        class="btn-verify"
+      >
+        <span *ngIf="!isVerifying">Verify & Proceed</span>
+        <span *ngIf="isVerifying">Verifying...</span>
+      </button>
+
+      <div class="change-mobile-wrapper">
+        <button type="button" class="btn-change-num" (click)="goBackToRegister()">
+          Edit registration details
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

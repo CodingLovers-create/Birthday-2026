@@ -1,9 +1,11 @@
 <div class="profile-main-container">
-  <app-page-header title="Profile" (back)="goBack()"></app-page-header>
+  <app-page-header title="Profile" (back)="goBack()">
+    <button type="button" class="btn-logout-header" (click)="logout()">Logout</button>
+  </app-page-header>
 
   <div class="profile-header-card">
-    <img [src]="profileAvatar" [alt]="profileName" class="avatar-img" />
-    <h2 class="profile-name">{{ profileName | capitalizeFirst | nameFormatter }}</h2>
+    <img [src]="profileAvatar" [alt]="userDisplayName" class="avatar-img" />
+    <h2 class="profile-name">{{ userDisplayName | capitalizeFirst | nameFormatter }}</h2>
   </div>
 
   <div class="stats-counter-bar">
@@ -30,6 +32,16 @@
       (click)="openPost(post)"
     >
       <img [src]="post.images[0]" alt="Post thumbnail" class="thumb-img" />
+    </button>
+  </div>
+
+  <!-- Logout Button Section -->
+  <div class="logout-action-wrapper">
+    <button type="button" class="btn-profile-logout" (click)="logout()">
+      <svg class="logout-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+      <span>Logout</span>
     </button>
   </div>
 </div>

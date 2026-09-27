@@ -86,12 +86,15 @@ export class PostsService {
 
   createPost(newPostData: Partial<Post>): Observable<Post> {
     const newId = Date.now();
+    const savedUsername = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('username') : null;
+    const authorName = newPostData.userName || savedUsername || 'Logged In User';
+
     const postPayload: Post = {
       id: newId,
       postId: newId,
-      userName: newPostData.userName || 'Aarav Sharma',
-      tinyProfilePic: newPostData.tinyProfilePic || 'https://i.pravatar.cc/100?img=1',
-      profilePic: newPostData.profilePic || 'https://i.pravatar.cc/300?img=1',
+      userName: authorName,
+      tinyProfilePic: newPostData.tinyProfilePic || 'https://i.pravatar.cc/100?img=12',
+      profilePic: newPostData.profilePic || 'https://i.pravatar.cc/300?img=12',
       images: newPostData.images && newPostData.images.length ? newPostData.images : ['assets/images/templates/Preview1.webp'],
       description: newPostData.description || 'Wishing you a very Happy Birthday! 🎉',
       tag: newPostData.tag || 'Birthday Wishes',

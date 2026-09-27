@@ -1,40 +1,47 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScrollService {
-
-  constructor() { }
-
-  //Code written by Harshvardhan Pandey Ji
   private scrollPosition: number = 0;
 
+  constructor(@Inject(DOCUMENT) private readonly document: Document) {}
+
   public disableScroll(): void {
-    this.scrollPosition = window.pageYOffset;
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${this.scrollPosition}px`;
-    document.body.style.width = '100%';
+    const win = this.document.defaultView;
+    this.scrollPosition = win ? win.pageYOffset : 0;
+    const body = this.document.body;
+    if (body) {
+      body.style.overflow = 'hidden';
+      body.style.position = 'fixed';
+      body.style.top = `-${this.scrollPosition}px`;
+      body.style.width = '100%';
+    }
   }
 
   public enableScroll(): void {
-    document.body.style.removeProperty('overflow');
-    document.body.style.removeProperty('position');
-    document.body.style.removeProperty('top');
-    document.body.style.removeProperty('width');
-    window.scrollTo(0, this.scrollPosition);
+    const body = this.document.body;
+    if (body) {
+      body.style.removeProperty('overflow');
+      body.style.removeProperty('position');
+      body.style.removeProperty('top');
+      body.style.removeProperty('width');
+    }
+    const win = this.document.defaultView;
+    if (win) {
+      win.scrollTo(0, this.scrollPosition);
+    }
   }
 
-  scrollToElement(elementId: string) {
-
-    // Get the viewport height
-    // var viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+  scrollToElement(elementId: string): void {
     setTimeout(() => {
-      const element = document.getElementById(elementId);
+      const element = this.document.getElementById(elementId);
       if (element) {
-        element.scrollIntoView();
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
   }
 }
+

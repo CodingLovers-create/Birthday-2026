@@ -1,25 +1,23 @@
-import { Injectable, OnInit } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfigService } from './config.service';
 import { Config } from '../types/Config';
-import { config } from 'rxjs';
 
-
-
-declare const dataLayer:any;
+declare const dataLayer: any;
 
 @Injectable({
   providedIn: 'root'
 })
-export class GoogleanalyticsService{
+export class GoogleanalyticsService {
+  private destroyRef = inject(DestroyRef);
   config!: Config;
 
-  constructor(
-    private configService: ConfigService,
-  ) { 
-    this.configService.CurrentConfig.subscribe((data: Config) => {
-      this.config = data;
-      
-    });
+  constructor(private configService: ConfigService) {
+    this.configService.CurrentConfig
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data: Config) => {
+        this.config = data;
+      });
   }
 
 

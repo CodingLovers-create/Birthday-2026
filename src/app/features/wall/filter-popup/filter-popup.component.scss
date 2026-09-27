@@ -17,8 +17,10 @@
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
     background-color: #ffffff;
-    padding: 20px;
+    padding: 20px 20px max(20px, env(safe-area-inset-bottom, 0px)) 20px;
     box-sizing: border-box;
+    max-height: 85vh;
+    overflow-y: auto;
 
     .sheet-title-row {
       margin-bottom: 16px;

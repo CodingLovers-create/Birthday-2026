@@ -8,6 +8,7 @@ import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 
 import constants from '../../constants/constants';
 import { AuditLogsService } from '../../services/audit-logs.service';
+import { AuthService } from '../../services/auth.service';
 import { ConfigService } from '../../services/config.service';
 import { DataService } from '../../services/data.service';
 import { GoogleanalyticsService } from '../../services/googleanalytics.service';
@@ -94,6 +95,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   captionForm!: FormGroup;
   isdescempty: string = "No";
   isSubmitDisabled: boolean = false;
+  extraSpaceHeight: number = 0;
   
 
   //POPUP
@@ -181,51 +183,56 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     // }
 
 
-    this.configService.CurrentConfig.subscribe((data: Config) => {
-      this.config = data;
-    });
+    this.configService.CurrentConfig
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data: Config) => {
+        this.config = data;
+      });
 
-    // STATIC VALUES TO TEST POST FUNCTION ON LOCALHOST
-    // this.dataService.numcelebritySelected.next(1)
-    // this.dataService.apiResponseImage.next("https://namo11uat.narendramodi.in/amrit_dharohar_quiz/assets/images/templates/Preview1.png")
-    // this.dataService.numcelebritySelected.next(2)
-    // this.dataService.apiResponseImage.next("https://delhichalimodikesaathuat.narendramodi.in/assets/templates/Rani.png")
-    // this.dataService.apiResponseError.next("template number not found in the configuration")
-    // this.dataService.apiResponseErrorID.next(11)
-    // 100 - noFaceErrorMessage | 101 - multipleFaceErrorMessage | 201 - imageUploadError (corrupt img) | 11 - imageUploadError (fileSize limit) | 1004 - File Format Error
-    // this.noApiResponseImg = 'https://delhichalimodikesaathuat.narendramodi.in/assets/templates/Rani.png';
+    this.dataService.apiResponseWait
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.wait_value = data;
+      });
 
+    this.dataService.apiResponsePopup
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.showCamUploadLoader = data;
+      });
 
-    this.dataService.apiResponseWait.subscribe((data) => {
-      this.wait_value = data;
-    });
+    this.dataService.apiResponseError
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.apiErrorMessage = data;
+      });
 
-    this.dataService.apiResponsePopup.subscribe((data) => {
-      this.showCamUploadLoader = data;
-    });
+    this.dataService.apiResponseErrorID
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.apiResponseErrorID = data;
+      });
 
-    this.dataService.apiResponseError.subscribe((data) => {
-      this.apiErrorMessage = data;
-    });
+    this.dataService.isPerfectImageShowError
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.isPerfectImageShowError = data;
+      });
 
-    this.dataService.apiResponseErrorID.subscribe((data) => {
-      this.apiResponseErrorID = data;
-    });
+    this.dataService.isFileErrorOpen
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.showFileError = data;
+      });
 
-    this.dataService.isPerfectImageShowError.subscribe((data) => {
-      this.isPerfectImageShowError = data;
-    });
-
-    this.dataService.isFileErrorOpen.subscribe((data) => {
-      this.showFileError = data;
-    });
-
-    this.dataService.clickedButton.subscribe((data) => {
-      if (data === 'camera') {
-        this.dataService.updateCameraPopupState('cancel');
-      }
-      this.clickedButton = data;
-    });
+    this.dataService.clickedButton
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        if (data === 'camera') {
+          this.dataService.updateCameraPopupState('cancel');
+        }
+        this.clickedButton = data;
+      });
 
     this.selected_templete = this.dataService.selectedTemplete.value;
 
@@ -344,25 +351,16 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
 
   scrollDown() {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isAndroid = userAgent.includes('android');
-    if (isAndroid) {
-      let element = document.querySelector('.extra-space') as HTMLElement;
-      if (element) {
-        element.style.height = '0%';
-      }
+    const userAgent = window.navigator?.userAgent?.toLowerCase() || '';
+    if (userAgent.includes('android')) {
+      this.extraSpaceHeight = 0;
     }
   }
-  scrollToTop(event: any) {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isAndroid = userAgent.includes('android');
 
-    if (isAndroid) {
-      let element = document.querySelector('.extra-space') as HTMLElement;
-      if (element) {
-        element.style.height = '375px';
-        window.scrollTo(0, document.body.scrollHeight);
-      }
+  scrollToTop(event: any) {
+    const userAgent = window.navigator?.userAgent?.toLowerCase() || '';
+    if (userAgent.includes('android')) {
+      this.extraSpaceHeight = 375;
     }
   }
 
@@ -670,14 +668,21 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
 
+  private authService = inject(AuthService);
+
   selfieSubmit() {
     let imageURL = this.dataService.apiResponseImage.value || 'assets/images/templates/Preview1.webp';
     let caption: string = this.caption.trimStart().trimEnd().replace(/(\r?\n){3,}/g, '\n\n');
 
-    console.log('[CreatePostComponent] Triggering SDK call: sdkService.shareImage()', { description: caption, imageURL });
+    const draftUser = this.authService.getDraftForm()?.username;
+    const sessionUser = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('username') : null;
+    const loggedInUserName = draftUser || sessionUser || this.dataService.getUsername() || 'User';
+
+    console.log('[CreatePostComponent] Triggering SDK call: sdkService.shareImage()', { description: caption, imageURL, userName: loggedInUserName });
     this.sdkService.shareImage(caption, imageURL);
 
     this.postsService.createPost({
+      userName: loggedInUserName,
       description: caption || 'Wishing you a very Happy Birthday! 🎉',
       images: [imageURL],
       tag: this.selectedModuleTag || 'Birthday Wishes'

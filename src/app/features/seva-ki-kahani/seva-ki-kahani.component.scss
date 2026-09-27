@@ -2,10 +2,8 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  height: 100%;
-  max-height: 100%;
+  min-height: 100%;
   width: 100%;
-  overflow: hidden;
 }
 
 .doodle-bg {
@@ -16,16 +14,19 @@
 }
 
 .seva-ki-kahani-container {
+  margin: 0 auto;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
-  max-height: 100%;
-  padding: 0 16px 12px 16px;
+  max-width: 512px;
+  min-height: 100vh;
+  height: auto;
+  padding: 0 16px max(16px, env(safe-area-inset-bottom)) 16px;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   user-select: none;
   font-family: 'Poppins', sans-serif;
 

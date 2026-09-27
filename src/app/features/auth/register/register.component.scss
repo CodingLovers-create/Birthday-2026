@@ -1,0 +1,185 @@
+.register-main-container {
+  margin: 0 auto;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 512px;
+  background-color: #FAF6F0;
+  background-image: radial-gradient(#d4cebe 0.75px, transparent 0.75px), radial-gradient(#d4cebe 0.75px, #FAF6F0 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  padding-bottom: max(32px, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+
+  .register-card-wrapper {
+    padding: 20px 20px 32px 20px;
+
+    .header-badge-section {
+      text-align: center;
+      margin-bottom: 24px;
+
+      .badge {
+        display: inline-block;
+        border-radius: 9999px;
+        background-color: #E85235;
+        padding: 4px 16px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 0.05em;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+
+      .hero-title {
+        margin-top: 10px;
+        font-size: clamp(24px, 6vw, 28px);
+        font-weight: 800;
+        color: #191919;
+
+        .highlight {
+          color: #E85235;
+        }
+      }
+
+      .hero-subtext {
+        margin-top: 6px;
+        font-size: 13px;
+        color: rgba(25, 25, 25, 0.6);
+        line-height: 1.4;
+      }
+    }
+
+    .reactive-form-box {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .form-label {
+          font-size: 13px;
+          font-weight: 700;
+          color: #40261A;
+
+          .req {
+            color: #D90429;
+          }
+        }
+
+        .input-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+          border: 1.5px solid #E4DDD6;
+          border-radius: 12px;
+          background-color: #FAF6F0;
+          padding: 0 12px;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+          &:focus-within {
+            border-color: #E85235;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(232, 82, 53, 0.15);
+          }
+
+          &.is-invalid {
+            border-color: #D90429;
+            background-color: #FFF5F5;
+          }
+
+          .input-icon {
+            width: 18px;
+            height: 18px;
+            color: #898480;
+            flex-shrink: 0;
+            margin-right: 8px;
+          }
+
+          .country-code {
+            font-size: 14px;
+            font-weight: 700;
+            color: #E85235;
+            margin-right: 8px;
+            padding-right: 8px;
+            border-right: 1px solid rgba(0, 0, 0, 0.15);
+          }
+
+          .form-input {
+            flex: 1;
+            height: 46px;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 14px;
+            color: #191919;
+            outline: none;
+
+            &::placeholder {
+              color: #A39E98;
+            }
+
+            &.select-input {
+              cursor: pointer;
+              appearance: none;
+              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2340261A'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+              background-repeat: no-repeat;
+              background-position: right 0 center;
+              background-size: 18px;
+            }
+          }
+        }
+
+        .error-feedback {
+          font-size: 12px;
+          font-weight: 500;
+          color: #D90429;
+          margin-top: 2px;
+          padding-left: 2px;
+        }
+      }
+
+      .btn-container {
+        margin-top: 8px;
+
+        .btn-submit-mobile {
+          width: 100%;
+          height: 48px;
+          border-radius: 9999px;
+          background-color: #E85235;
+          color: #ffffff;
+          border: none;
+          font-size: 15px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(232, 82, 53, 0.25);
+          transition: background-color 0.15s ease, transform 0.1s ease;
+
+          &:hover {
+            background-color: #d14227;
+          }
+
+          &:active {
+            transform: scale(0.98);
+          }
+
+          .arrow-icon {
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+    }
+  }
+}
